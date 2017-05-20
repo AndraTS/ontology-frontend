@@ -14,35 +14,6 @@
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
-    // Object Properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/andra/ontology1#growIn -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/ontology1#growIn">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/ontology1#GreenHouse"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/andra/ontology1#has -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/ontology1#has">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
     // Data properties
     //
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -98,12 +69,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/andra/ontology1#GreenHouse -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/andra/ontology1#GreenHouse"/>
-    
-
-
     <!-- http://www.semanticweb.org/andra/ontology1#GrowthConditions -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
@@ -113,8 +78,14 @@
     <!-- http://www.semanticweb.org/andra/ontology1#Plant -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/andra/ontology1#Plant">
-        <rdfs:comment>This is the class of all the plants.</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This is the class of all the plants.</rdfs:comment>
     </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/owlapi/ontologies/ontology1#GreenHouse -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/owlapi/ontologies/ontology1#GreenHouse"/>
     
 
 
@@ -133,7 +104,6 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#Beans">
         <rdf:type rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
-        <Plants:has rdf:resource="http://www.semanticweb.org/andra/ontology1#BeansConditions"/>
     </owl:NamedIndividual>
     
 
@@ -150,12 +120,9 @@
     
 
 
-    <!-- http://www.semanticweb.org/andra/ontology1#Tomatoes -->
+    <!-- http://www.semanticweb.org/andra/ontology1#GH1 -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#Tomatoes">
-        <rdf:type rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
-        <Plants:has rdf:resource="http://www.semanticweb.org/andra/ontology1#TomatoesConditions"/>
-    </owl:NamedIndividual>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#GH1"/>
     
 
 

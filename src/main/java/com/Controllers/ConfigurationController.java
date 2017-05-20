@@ -28,9 +28,11 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -64,7 +66,7 @@ public class ConfigurationController implements Serializable {
 	public List<String> getGreenHouses() throws OWLOntologyCreationException {
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/workspace/ontology-frontend/Files/Configuration.owl");
+		File file = new File("/home/andra/git/ontology-frontend/Files/Configuration.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
 		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/configuration");
 		OWLDataFactory factory = manager.getOWLDataFactory();
@@ -105,9 +107,9 @@ public class ConfigurationController implements Serializable {
 		// IRI ontologyIRI =
 		// IRI.create("http://www.ontology.ro/myOntology2.owl");
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/workspace/ontology-frontend/Files/Ontology1.owl");
+		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
-		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/ontology1");// manager.getOntologyDocumentIRI(myOntology);
+		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");// manager.getOntologyDocumentIRI(myOntology);
 		OWLDataFactory factory = manager.getOWLDataFactory();
 
 		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
@@ -147,9 +149,10 @@ public class ConfigurationController implements Serializable {
 
 	public void submitConfiguration()
 			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
-		updateOntology(this.environment.getPlantName(), this.environment.getGreenHouseName());
+
 		FacesMessage message = null;
 		try {
+			updateOntology(this.environment.getPlantName(), this.environment.getGreenHouseName());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Configuration updated successfully!", null);
 
 		} catch (Exception e) {
@@ -166,9 +169,9 @@ public class ConfigurationController implements Serializable {
 
 			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
 
-		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/owlapi/ontologies/ontology1");
+		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/workspace/ontology-frontend/Files/Ontology1.owl");
+		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
 		OWLDataFactory factory = manager.getOWLDataFactory();
 
@@ -178,30 +181,41 @@ public class ConfigurationController implements Serializable {
 		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
 		reasoner.precomputeInferences();
 
-		OWLNamedIndividual plantInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + plantName);
 		OWLNamedIndividual greenHouseInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + greenHouseName);
+		OWLNamedIndividual plantInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + plantName);
 		OWLObjectProperty growIn = factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#growIn"));
+
+		// delete previous configuration
+		Set<OWLOntologyChange> changes = new HashSet<OWLOntologyChange>();
+		Set<OWLObjectPropertyAssertionAxiom> set = myOntology.getObjectPropertyAssertionAxioms(plantInd);
+		for (OWLObjectPropertyAssertionAxiom a : set)
+			changes.add(new RemoveAxiom(myOntology, a));
+
+		List<OWLOntologyChange> list = new ArrayList<OWLOntologyChange>(changes);
+		manager.applyChanges(list);
 
 		OWLAxiom assertion = factory.getOWLObjectPropertyAssertionAxiom(growIn, plantInd, greenHouseInd);
 		AddAxiom addAxiomChange = new AddAxiom(myOntology, assertion);
 		manager.applyChange(addAxiomChange);
 
-		// create the inverse properties
 		OWLClass greenHouseClass = factory.getOWLClass(IRI.create(ontologyIRI + "#GreenHouse"));
+		OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(greenHouseClass, greenHouseInd);
+		manager.addAxiom(myOntology, ax);
+
 		OWLObjectProperty grow = factory.getOWLObjectProperty(ontologyIRI + "#grow");
 		manager.addAxiom(myOntology, factory.getOWLInverseObjectPropertiesAxiom(growIn, grow));
-		
+
 		Set<OWLAxiom> domainsAndRanges = new HashSet<OWLAxiom>();
 		domainsAndRanges.add(factory.getOWLObjectPropertyDomainAxiom(grow, greenHouseClass));
 		for (OWLAxiom a : domainsAndRanges)
 			manager.addAxiom(myOntology, a);
 
-
 		// createProperty("#growIn", beans, greenHouse1, manager, factory,
 		// ontologyIRI, myOntology);
 
 		// save the ontology on the disk
-		File fileformated = new File("/home/andra/workspace/ontology-frontend/Files/new1.owl");
+
+		File fileformated = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		File newOntologyFile = fileformated.getAbsoluteFile();
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newOntologyFile));
 
@@ -212,7 +226,7 @@ public class ConfigurationController implements Serializable {
 
 	public void onGreenHouseChange() throws OWLOntologyCreationException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/workspace/ontology-frontend/Files/Configuration.owl");
+		File file = new File("/home/andra/git/ontology-frontend/Files/Configuration.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
 		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/configuration");
 		OWLDataFactory factory = manager.getOWLDataFactory();
@@ -331,7 +345,7 @@ public class ConfigurationController implements Serializable {
 		}
 
 		// save the ontology on the disk
-		File fileformated = new File("/home/andra/workspace/ontology-frontend/Files/fullOntology.owl");
+		File fileformated = new File("/home/andra/git/ontology-frontend/Files/fullOntology.owl");
 		File newOntologyFile = fileformated.getAbsoluteFile();
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newOntologyFile));
 

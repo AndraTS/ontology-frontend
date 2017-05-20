@@ -30,8 +30,8 @@ public class RunDataJob implements Job {
 		// IRI.create("http://www.semanticweb.org/owlapi/ontologies/ontology1");
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLDataFactory dataFactory = manager.getOWLDataFactory();
-		File file = new File("/home/andra/workspace/ontology-frontend/Files/Ontology1.owl");
-		String base = "http://www.semanticweb.org/owlapi/ontologies/ontology1";
+		File file = new File("/home/andra/git/ontology-frontend/Files/Ontology1.owl");
+		String base = "http://www.semanticweb.org/owlapi/ontologies/ontology1#";
 		PrefixManager pm = new DefaultPrefixManager(base);
 		try {
 			OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
