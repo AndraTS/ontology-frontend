@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/andra/Sera#"
+     xml:base="http://www.semanticweb.org/andra/Sera"
+     xmlns:ontology1="http://www.semanticweb.org/owlapi/ontologies/ontology1#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:Plants="http://www.semanticweb.org/andra/ontology1#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/andra/ontology1"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#growIn -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/ontology1#growIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/ontology1#GreenHouse"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#has -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/ontology1#has">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/owlapi/ontologies/ontology1#grow -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/owlapi/ontologies/ontology1#grow"/>
+    
+
+
+    <!-- http://www.semanticweb.org/owlapi/ontologies/ontology1#growIn -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/owlapi/ontologies/ontology1#growIn">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/owlapi/ontologies/ontology1#grow"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Hmax -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/ontology1#Hmax">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Hmin -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/ontology1#Hmin">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Tmax -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/ontology1#Tmax">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Tmin -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/ontology1#Tmin">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#GreenHouse -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/ontology1#GreenHouse"/>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#GrowthConditions -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Plant -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/ontology1#Plant">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This is the class of all the plants.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Beans -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#Beans">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
+        <Plants:has rdf:resource="http://www.semanticweb.org/andra/ontology1#BeansConditions"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#BeansConditions -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#BeansConditions">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+        <Plants:Hmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</Plants:Hmax>
+        <Plants:Hmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</Plants:Hmin>
+        <Plants:Tmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</Plants:Tmax>
+        <Plants:Tmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</Plants:Tmin>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#Tomatoes -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#Tomatoes">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/ontology1#Plant"/>
+        <Plants:has rdf:resource="http://www.semanticweb.org/andra/ontology1#TomatoesConditions"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/ontology1#TomatoesConditions -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/ontology1#TomatoesConditions">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/ontology1#GrowthConditions"/>
+        <Plants:Hmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</Plants:Hmax>
+        <Plants:Hmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">65</Plants:Hmin>
+        <Plants:Tmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</Plants:Tmax>
+        <Plants:Tmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</Plants:Tmin>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/owlapi/ontologies/ontology1#GreenHouseT -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/owlapi/ontologies/ontology1#GreenHouseT"/>
+    
+
+
+    <!-- http://www.semanticweb.org/owlapi/ontologies/ontology1#Tomatoes -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/owlapi/ontologies/ontology1#Tomatoes">
+        <ontology1:growIn rdf:resource="http://www.semanticweb.org/owlapi/ontologies/ontology1#GreenHouseT"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 5.0.5) https://github.com/owlcs/owlapi/ -->
+
+

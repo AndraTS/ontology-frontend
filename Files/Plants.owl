@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/andra/Sera#"
+     xml:base="http://www.semanticweb.org/andra/Sera"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:Plants="http://www.semanticweb.org/andra/Plants#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/andra/Plants"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#growIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/Plants#growIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/Plants#Plant"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/Plants#GreenHouse"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#has -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/Plants#has">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/Plants#Plant"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Hmax -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/Plants#Hmax">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Hmin -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/Plants#Hmin">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Tmax -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/Plants#Tmax">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Tmin -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/Plants#Tmin">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#GreenHouse -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/Plants#GreenHouse"/>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#GrowthConditions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Plant -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/Plants#Plant">
+        <rdfs:comment>This is the class of all the plants.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Beans -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/Plants#Beans">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/Plants#Plant"/>
+        <Plants:has rdf:resource="http://www.semanticweb.org/andra/Plants#BeansConditions"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#BeansConditions -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/Plants#BeansConditions">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+        <Plants:Hmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</Plants:Hmax>
+        <Plants:Hmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</Plants:Hmin>
+        <Plants:Tmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</Plants:Tmax>
+        <Plants:Tmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</Plants:Tmin>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#Tomatoes -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/Plants#Tomatoes">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/Plants#Plant"/>
+        <Plants:has rdf:resource="http://www.semanticweb.org/andra/Plants#TomatoesConditions"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/Plants#TomatoesConditions -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/Plants#TomatoesConditions">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/Plants#GrowthConditions"/>
+        <Plants:Hmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</Plants:Hmax>
+        <Plants:Hmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">65</Plants:Hmin>
+        <Plants:Tmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</Plants:Tmax>
+        <Plants:Tmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</Plants:Tmin>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+

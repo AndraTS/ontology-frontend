@@ -1,0 +1,97 @@
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!eeditorditorDOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+
+	<h1 class="title ui-widget-header ui-corner-all"
+		style="text-align: center">Welcome</h1>
+
+
+	<h1 style="color: red">#{Start.alerta}</h1>
+
+	<h:form id="form">
+		<p:tabView dynamic="true" cache="false">
+			<p:tab id="t1" title="Environment Configuration">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="greenHouse" value="GreenHouse: " />
+					<p:inputText id="greenHouse"
+						value="#{ConfigurationController.environment.greenHouseName}" />
+
+					<p:outputLabel for="plant" value="Plant:" />
+					<p:inputText id="plant"
+						value="#{ConfigurationController.environment.plantName}" />
+
+					<p:outputLabel for="seedingMoment" value="Seeding Moment:" />
+					<p:calendar id="seedingMoment"
+						value="#{ConfigurationController.environment.seedingMoment}" />
+
+				</h:panelGrid>
+
+				<p:growl id="growl" life="2000" />
+				<p:commandButton value="Submit"
+					action="#{ConfigurationController.submitConfiguration}"
+					icon="ui-icon-check" process="@form" update="growl" />
+
+			</p:tab>
+
+			<p:tab title="Environment Monitoring">
+
+				<p:panel header="Select the green house" style="margin-bottom:10px;">
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:outputLabel for="gH" value="Green House: " />
+						<p:selectOneMenu id="gH"
+							value="#{ConfigurationController.selectedGreenHouse}"
+							style="width:150px">
+							<p:ajax listener="#{ConfigurationController.onGreenHouseChange}" update="dashboard" />
+							<f:selectItem itemLabel="Select Green House" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{ConfigurationController.greenHouses}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<p:separator />
+
+					<p:layout id="dashboard" style="min-width:400px;min-height:400px;">
+						<p:layoutUnit position="west" resizable="true" size="320">
+							<p:panelGrid columns="2" style="width: 300"  >
+								<f:facet name="header">
+									<p:graphicImage  />
+								</f:facet>
+
+								<h:outputText value="Temperature Min:" />
+								<h:outputText value="" />
+
+								<h:outputText value="Temperature MAx:" />
+								<h:outputText value="" />
+
+								<h:outputText value="Moisture Min:" />
+								<h:outputText value="" />
+
+								<h:outputText value="Moisture Max:" />
+								<h:outputText value="" />
+							</p:panelGrid>
+						</p:layoutUnit>
+
+						<p:layoutUnit position="center">
+
+						</p:layoutUnit>
+					</p:layout>
+
+				</p:panel>
+
+			</p:tab>
+		</p:tabView>
+	</h:form>
+
+</h:body>
+</html>

@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/andra/Configuration"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/andra/Configuration">
+    <Prefix name="" IRI="http://www.semanticweb.org/andra/Sera"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#GreenHouse"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://www.semanticweb.org/owlapi/ontologies/ontology#growIn"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Tmin"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Beans"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#growIn"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Hmin"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BeansConditions"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GrowthConditions"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Tmax"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Hmax"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Plant"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://www.semanticweb.org/owlapi/ontologies/ontology#A"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="#Plant"/>
+        <NamedIndividual IRI="#Beans"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#GrowthConditions"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#GrowthConditions"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#GreenHouse"/>
+        <NamedIndividual IRI="http://www.semanticweb.org/owlapi/ontologies/ontology#A"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#growIn"/>
+        <NamedIndividual IRI="#Beans"/>
+        <NamedIndividual IRI="http://www.semanticweb.org/owlapi/ontologies/ontology#A"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#has"/>
+        <NamedIndividual IRI="#Beans"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Hmax"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">70</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Hmin"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">60</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Tmax"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">25</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Tmin"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Hmax"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">70</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Hmin"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">65</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Tmax"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">25</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Tmin"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">18</Literal>
+    </DataPropertyAssertion>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#growIn"/>
+        <Class IRI="#Plant"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#has"/>
+        <Class IRI="#Plant"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#growIn"/>
+        <Class IRI="#GreenHouse"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#has"/>
+        <Class IRI="#GrowthConditions"/>
+    </ObjectPropertyRange>
+    <DataPropertyDomain>
+        <DataProperty IRI="#Hmax"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#Hmin"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#Tmax"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#Tmin"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#Hmax"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#Hmin"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#Tmax"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#Tmin"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Plant</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">This is the class of all the plants.</Literal>
+    </AnnotationAssertion>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+

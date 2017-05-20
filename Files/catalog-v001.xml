@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="http://www.ontology.ro/myOntology.owl" uri="OLD/beans.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="http://www.semanticweb.org/andra/Configuration" uri="OLD/ConfigurataBine.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="duplicate:http://www.semanticweb.org/andra/Sera" uri="PlantsOntology.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="duplicate:http://www.semanticweb.org/andra/Sera" uri="Plants.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="duplicate:http://www.semanticweb.org/andra/Sera" uri="new.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="duplicate:http://www.semanticweb.org/andra/Sera" uri="Ontology1.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="http://www.semanticweb.org/andra/configuration" uri="Configuration.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="http://www.semanticweb.org/andra/configuration1" uri="Configuration1.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1494349344315" name="shadowed:http://www.semanticweb.org/andra/Sera" uri="OLD/po1.owl"/>
+    </group>
+</catalog>
