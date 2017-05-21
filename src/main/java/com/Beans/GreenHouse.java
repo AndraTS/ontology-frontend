@@ -11,13 +11,13 @@ public class GreenHouse {
 	private Plant plant;
 	private List<Sensor> sensors;
 	
-
-	public String getName() {
+	
+	public String getGreenHouseName() {
 		return greenHouseName;
 	}
 
-	public void setName(String name) {
-		greenHouseName = name;
+	public void setGreenHouseName(String greenHouseName) {
+		this.greenHouseName = greenHouseName;
 	}
 
 	public Plant getPlant() {

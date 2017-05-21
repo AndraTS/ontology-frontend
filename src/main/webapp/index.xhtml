@@ -26,10 +26,16 @@
 					<p:outputLabel for="greenHouse" value="GreenHouse: " />
 					<p:inputText id="greenHouse"
 						value="#{ConfigurationController.environment.greenHouseName}" />
+					
 
 					<p:outputLabel for="plant" value="Plant:" />
-					<p:inputText id="plant"
-						value="#{ConfigurationController.environment.plantName}" />
+					<p:selectOneMenu id="plant"
+						value="#{ConfigurationController.selectedPlant}"
+						style="width:150px">
+						<f:selectItem itemLabel="Select a plant" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{ConfigurationController.plants}" />
+					</p:selectOneMenu>
 
 					<p:outputLabel for="seedingMoment" value="Seeding Moment:" />
 					<p:calendar id="seedingMoment"
@@ -47,15 +53,16 @@
 			<p:tab title="Environment Monitoring">
 
 				<p:panel header="Select the green house" style="margin-bottom:10px;">
-					<h:panelGrid columns="2" cellpadding="5">
+					<h:panelGrid columns="2" cellpadding="5" >
 						<p:outputLabel for="gH" value="Green House: " />
-						<p:selectOneMenu id="gH"
-							value="#{ConfigurationController.selectedGreenHouse}"
+						<p:selectOneMenu id="gH" 
+							value="#{MonitoringController.selectedGreenHouse.greenHouseName}" 
 							style="width:150px">
-							<p:ajax listener="#{ConfigurationController.onGreenHouseChange}" update="dashboard" />
+							<p:ajax listener="#{MonitoringController.onGreenHouseChange}"
+								update="dashboard" />
 							<f:selectItem itemLabel="Select Green House" itemValue=""
 								noSelectionOption="true" />
-							<f:selectItems value="#{ConfigurationController.greenHouses}" />
+							<f:selectItems value="#{MonitoringController.greenHouses}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 
@@ -63,22 +70,22 @@
 
 					<p:layout id="dashboard" style="min-width:400px;min-height:400px;">
 						<p:layoutUnit position="west" resizable="true" size="320">
-							<p:panelGrid columns="2" style="width: 300"  >
+							<p:panelGrid columns="2" style="width: 300" >
 								<f:facet name="header">
-									<p:graphicImage  />
+									<p:graphicImage />
 								</f:facet>
 
-								<h:outputText value="Temperature Min:" />
-								<h:outputText value="" />
+								<h:outputText value="Temperature Min:"  />
+								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minTemperature}" />
 
 								<h:outputText value="Temperature MAx:" />
-								<h:outputText value="" />
+								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxTemperature}" />
 
 								<h:outputText value="Moisture Min:" />
-								<h:outputText value="" />
+								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minMoisture}" />
 
 								<h:outputText value="Moisture Max:" />
-								<h:outputText value="" />
+								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxMoisture}" />
 							</p:panelGrid>
 						</p:layoutUnit>
 
@@ -89,6 +96,8 @@
 
 				</p:panel>
 
+			</p:tab>
+			<p:tab title="Crop Feedback">
 			</p:tab>
 		</p:tabView>
 	</h:form>

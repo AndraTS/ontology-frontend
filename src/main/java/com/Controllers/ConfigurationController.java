@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,14 +25,18 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.OWLPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.NodeSet;
@@ -40,6 +45,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
+import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 import com.Beans.Environment;
 
@@ -47,51 +53,17 @@ import com.Beans.Environment;
 @SessionScoped
 public class ConfigurationController implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	// Properties
 	private Environment environment = new Environment();
-	private List<String> greenHouses = new ArrayList<>();
-	private String selectedGreenHouse = "";
+	private List<String> plants = new ArrayList<>();
+	private String selectedPlant = "";
 
-	public String getSelectedGreenHouse() {
-		return selectedGreenHouse;
+	public String getSelectedPlant() {
+		return selectedPlant;
 	}
 
-	public void setSelectedGreenHouse(String selectedGreenHouse) {
-		this.selectedGreenHouse = selectedGreenHouse;
-	}
-
-	public List<String> getGreenHouses() throws OWLOntologyCreationException {
-
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/git/ontology-frontend/Files/Configuration.owl");
-		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
-		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/configuration");
-		OWLDataFactory factory = manager.getOWLDataFactory();
-
-		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
-		ConsoleProgressMonitor progressMonitor = new ConsoleProgressMonitor();
-		OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
-		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
-		reasoner.precomputeInferences();
-
-		// populate green houses combo
-		OWLClass greenHouse = factory.getOWLClass(IRI.create(ontologyIRI + "#GreenHouse"));
-		NodeSet<OWLNamedIndividual> ghsNodeSet = reasoner.getInstances(greenHouse, true);
-		Set<OWLNamedIndividual> ghIndividuals = ghsNodeSet.getFlattened();
-		System.out.println("Instances of greenHouses: ");
-		for (OWLNamedIndividual ind : ghIndividuals) {
-			if (!greenHouses.contains(ind.getIRI().getShortForm().toString()))
-				greenHouses.add(ind.getIRI().getShortForm().toString());
-
-		}
-		return greenHouses;
-	}
-
-	public void setGreenHouses(List<String> greenHouses) {
-		this.greenHouses = greenHouses;
+	public void setSelectedPlant(String selectedPlant) {
+		this.selectedPlant = selectedPlant;
 	}
 
 	@PostConstruct
@@ -109,7 +81,7 @@ public class ConfigurationController implements Serializable {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
-		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");// manager.getOntologyDocumentIRI(myOntology);
+		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
 		OWLDataFactory factory = manager.getOWLDataFactory();
 
 		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
@@ -118,24 +90,52 @@ public class ConfigurationController implements Serializable {
 		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
 		reasoner.precomputeInferences();
 
+		// set plant if greenHouse already configured
 		OWLClass plant = factory.getOWLClass(IRI.create(ontologyIRI + "#Plant"));
 		NodeSet<OWLNamedIndividual> individualsNodeSet = reasoner.getInstances(plant, true);
 		Set<OWLNamedIndividual> individuals = individualsNodeSet.getFlattened();
 		System.out.println("Instances of plant: ");
 		for (OWLNamedIndividual ind : individuals) {
-			System.out.println("    " + ind.getIRI().getShortForm());
-			env.setPlantName(ind.getIRI().getShortForm().toString());
-			OWLObjectProperty growIn = factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#growIn"));
+			plants.add(ind.getIRI().getShortForm());
+		}
 
-			NodeSet<OWLNamedIndividual> houseValuesNodeSet = reasoner.getObjectPropertyValues(ind, growIn);
-			Set<OWLNamedIndividual> values = houseValuesNodeSet.getFlattened();
-			System.out.println("The GrowIn property values for Tomatoes:");
+		OWLClass greenHouseClass = factory.getOWLClass(IRI.create(ontologyIRI + "#GreenHouse"));
+		NodeSet<OWLNamedIndividual> housesNodeSet = reasoner.getInstances(greenHouseClass, true);
+		Set<OWLNamedIndividual> houseIndividuals = housesNodeSet.getFlattened();
+		for (OWLNamedIndividual ind : houseIndividuals) {
+			env.setGreenHouseName(ind.getIRI().getShortForm().toString());
+			OWLObjectProperty grow = factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#grow"));
+			NodeSet<OWLNamedIndividual> houseValues = reasoner.getObjectPropertyValues(ind, grow);
+			Set<OWLNamedIndividual> values = houseValues.getFlattened();
 			for (OWLNamedIndividual gh : values) {
-				System.out.println("    " + gh.getIRI().getShortForm());
-				env.setGreenHouseName(gh.getIRI().getShortForm().toString());
+				env.setPlantName(gh.getIRI().getShortForm().toString());
+				setSelectedPlant(gh.getIRI().getShortForm().toString());
 			}
 
 		}
+
+		/*
+		 * OWLClass plant = factory.getOWLClass(IRI.create(ontologyIRI +
+		 * "#Plant")); NodeSet<OWLNamedIndividual> individualsNodeSet =
+		 * reasoner.getInstances(plant, true); Set<OWLNamedIndividual>
+		 * individuals = individualsNodeSet.getFlattened();
+		 * System.out.println("Instances of plant: "); for (OWLNamedIndividual
+		 * ind : individuals) { System.out.println("    " +
+		 * ind.getIRI().getShortForm());
+		 * env.setPlantName(ind.getIRI().getShortForm().toString());
+		 * OWLObjectProperty growIn =
+		 * factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#growIn"));
+		 * 
+		 * NodeSet<OWLNamedIndividual> houseValuesNodeSet =
+		 * reasoner.getObjectPropertyValues(ind, growIn);
+		 * Set<OWLNamedIndividual> values = houseValuesNodeSet.getFlattened();
+		 * System.out.println("The GrowIn property values for Tomatoes:"); for
+		 * (OWLNamedIndividual gh : values) { System.out.println("    " +
+		 * gh.getIRI().getShortForm());
+		 * env.setGreenHouseName(gh.getIRI().getShortForm().toString()); }
+		 * 
+		 * }
+		 */
 		return env;
 	}
 
@@ -147,12 +147,22 @@ public class ConfigurationController implements Serializable {
 		this.environment = environment;
 	}
 
+	private static final long serialVersionUID = 1L;
+
+	public List<String> getPlants() {
+		return plants;
+	}
+
+	public void setPlants(List<String> plants) {
+		this.plants = plants;
+	}
+
 	public void submitConfiguration()
 			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
 
 		FacesMessage message = null;
 		try {
-			updateOntology(this.environment.getPlantName(), this.environment.getGreenHouseName());
+			updateOntology(getSelectedPlant(), this.environment.getGreenHouseName());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Configuration updated successfully!", null);
 
 		} catch (Exception e) {
@@ -181,6 +191,10 @@ public class ConfigurationController implements Serializable {
 		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
 		reasoner.precomputeInferences();
 
+		// classes
+		OWLClass greenHouseClass = factory.getOWLClass(IRI.create(ontologyIRI + "#GreenHouse"));
+		OWLClass plantClass = factory.getOWLClass(IRI.create(ontologyIRI + "#Plant"));
+
 		OWLNamedIndividual greenHouseInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + greenHouseName);
 		OWLNamedIndividual plantInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + plantName);
 		OWLObjectProperty growIn = factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#growIn"));
@@ -188,8 +202,24 @@ public class ConfigurationController implements Serializable {
 		// delete previous configuration
 		Set<OWLOntologyChange> changes = new HashSet<OWLOntologyChange>();
 		Set<OWLObjectPropertyAssertionAxiom> set = myOntology.getObjectPropertyAssertionAxioms(plantInd);
-		for (OWLObjectPropertyAssertionAxiom a : set)
+
+		for (OWLObjectPropertyAssertionAxiom a : set) {
+			OWLObjectProperty growInProp = (OWLObjectProperty) a.getProperty();
+			if (growInProp.equals(growIn))
+				changes.add(new RemoveAxiom(myOntology, a));
+		}
+
+		Set<OWLObjectPropertyAssertionAxiom> set2 = myOntology.getObjectPropertyAssertionAxioms(greenHouseInd);
+		for (OWLObjectPropertyAssertionAxiom a : set2)
 			changes.add(new RemoveAxiom(myOntology, a));
+
+		NodeSet<OWLNamedIndividual> housesNodeSet = reasoner.getInstances(greenHouseClass, true);
+		Set<OWLNamedIndividual> houseIndividuals = housesNodeSet.getFlattened();
+		OWLEntityRemover remover = new OWLEntityRemover(Collections.singleton(myOntology));
+		for (OWLNamedIndividual ind : houseIndividuals) {
+			remover.visit(ind);
+		}
+		manager.applyChanges(remover.getChanges());
 
 		List<OWLOntologyChange> list = new ArrayList<OWLOntologyChange>(changes);
 		manager.applyChanges(list);
@@ -198,9 +228,11 @@ public class ConfigurationController implements Serializable {
 		AddAxiom addAxiomChange = new AddAxiom(myOntology, assertion);
 		manager.applyChange(addAxiomChange);
 
-		OWLClass greenHouseClass = factory.getOWLClass(IRI.create(ontologyIRI + "#GreenHouse"));
 		OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(greenHouseClass, greenHouseInd);
 		manager.addAxiom(myOntology, ax);
+
+		OWLObjectPropertyDomainAxiom growInAx = factory.getOWLObjectPropertyDomainAxiom(growIn, plantClass);
+		manager.addAxiom(myOntology, growInAx);
 
 		OWLObjectProperty grow = factory.getOWLObjectProperty(ontologyIRI + "#grow");
 		manager.addAxiom(myOntology, factory.getOWLInverseObjectPropertiesAxiom(growIn, grow));
@@ -209,6 +241,11 @@ public class ConfigurationController implements Serializable {
 		domainsAndRanges.add(factory.getOWLObjectPropertyDomainAxiom(grow, greenHouseClass));
 		for (OWLAxiom a : domainsAndRanges)
 			manager.addAxiom(myOntology, a);
+
+		// grow assertion
+		OWLAxiom assertion2 = factory.getOWLObjectPropertyAssertionAxiom(grow, greenHouseInd, plantInd);
+		AddAxiom addAxiomChange2 = new AddAxiom(myOntology, assertion2);
+		manager.applyChange(addAxiomChange2);
 
 		// createProperty("#growIn", beans, greenHouse1, manager, factory,
 		// ontologyIRI, myOntology);
@@ -222,31 +259,6 @@ public class ConfigurationController implements Serializable {
 		manager.saveOntology(myOntology, new OWLXMLDocumentFormat(), outputStream);
 
 		// manager.saveOntology(myOntology);
-	}
-
-	public void onGreenHouseChange() throws OWLOntologyCreationException {
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/git/ontology-frontend/Files/Configuration.owl");
-		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
-		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/configuration");
-		OWLDataFactory factory = manager.getOWLDataFactory();
-
-		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
-		ConsoleProgressMonitor progressMonitor = new ConsoleProgressMonitor();
-		OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
-		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
-		reasoner.precomputeInferences();
-
-		OWLNamedIndividual greenHouseInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + selectedGreenHouse);
-		OWLObjectProperty growIn = factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#growIn"));
-
-		NodeSet<OWLNamedIndividual> growValuesNodeSet = reasoner.getObjectPropertyValues(greenHouseInd, growIn);
-		Set<OWLNamedIndividual> values2 = growValuesNodeSet.getFlattened();
-		System.out.println("The Grow property values for GreenHouse1:");
-		for (OWLNamedIndividual ind : values2) {
-			System.out.println("    " + ind);
-		}
-
 	}
 
 	private static void test1()

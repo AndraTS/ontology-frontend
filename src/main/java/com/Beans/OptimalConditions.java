@@ -1,36 +1,39 @@
 package com.Beans;
 
 public class OptimalConditions {
-	private int MinTemperature;
-	private int MaxTemperature;
-	private int MinMoisture;
-	private int MaxMoisture;
+	private int minTemperature;
+	private int maxTemperature;
+	private int minMoisture;
+	private int maxMoisture;
 	
 	
 	public int getMinTemperature() {
-		return MinTemperature;
+		return minTemperature;
 	}
 	public void setMinTemperature(int minTemperature) {
-		MinTemperature = minTemperature;
-	}
-	public int getMaxTemperature() {
-		return MaxTemperature;
-	}
-	public void setMaxTemperature(int maxTemperature) {
-		MaxTemperature = maxTemperature;
-	}
-	public int getMinMoisture() {
-		return MinMoisture;
-	}
-	public void setMinMoisture(int minMoisture) {
-		MinMoisture = minMoisture;
-	}
-	public int getMaxMoisture() {
-		return MaxMoisture;
-	}
-	public void setMaxMoisture(int maxMoisture) {
-		MaxMoisture = maxMoisture;
+		this.minTemperature = minTemperature;
 	}
 	
-
+	public int getMaxTemperature() {
+		return maxTemperature;
+	}
+	public void setMaxTemperature(int maxTemperature) {
+		this.maxTemperature = maxTemperature;
+	}
+	
+	public int getMinMoisture() {
+		return minMoisture;
+	}
+	public void setMinMoisture(int minMoisture) {
+		this.minMoisture = minMoisture;
+	}
+	
+	public int getMaxMoisture() {
+		return maxMoisture;
+	}
+	public void setMaxMoisture(int maxMoisture) {
+		this.maxMoisture = maxMoisture;
+	}
+	
+	
 }
