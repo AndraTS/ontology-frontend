@@ -1,23 +1,15 @@
 package com.Scheduler;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.SystemOutDocumentTarget;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import org.semanticweb.owlapi.model.PrefixManager;
-import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
 public class RunDataJob implements Job {
 
@@ -25,37 +17,36 @@ public class RunDataJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		System.out.println("Reading data");
+		ReadData();
 
-		// IRI ontologyIRI =
-		// IRI.create("http://www.semanticweb.org/owlapi/ontologies/ontology1");
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		OWLDataFactory dataFactory = manager.getOWLDataFactory();
-		File file = new File("/home/andra/git/ontology-frontend/Files/Ontology1.owl");
-		String base = "http://www.semanticweb.org/owlapi/ontologies/ontology1#";
-		PrefixManager pm = new DefaultPrefixManager(base);
+	}
+
+	private void ReadData() {
 		try {
-			OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
-			OWLClass ghClass = dataFactory.getOWLClass(":GreenHouse", pm);
-			OWLNamedIndividual ghInd = dataFactory.getOWLNamedIndividual(":GreenHouse1", pm);
+			Data.br = new BufferedReader(new FileReader(Data.csvFile));
+			List<String> lines = Data.br.lines().skip(Data.last).limit(10).collect(Collectors.toList());
+			for (String l : lines) {
+				String[] p = l.split(Data.cvsSplitBy);
+				System.out.println("GreenHouse [name= " + p[2] + ", TInt =" + p[8] + ", TExt = " + p[3] + ", MInt= "
+						+ p[11] + " ]");
+			}
 
-			OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(ghClass, ghInd);
-			
-			OWLOntology ontology = manager.createOntology(IRI.create(base));
+			Data.last = Data.last + 10;
+			lines.clear();
 
-			manager.addAxiom(ontology, classAssertion);
-
-			 
-
-			// Dump the ontology to stdout
-
-			manager.saveOntology(ontology, new SystemOutDocumentTarget());
-
-		} catch (OWLOntologyCreationException | OWLOntologyStorageException e) {
-			// TODO Auto-generated catch block
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (Data.br != null) {
+				try {
+					Data.br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		OWLDataFactory factory = manager.getOWLDataFactory();
-
 	}
 
 }

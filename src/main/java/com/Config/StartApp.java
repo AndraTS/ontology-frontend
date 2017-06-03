@@ -30,8 +30,8 @@ public class StartApp implements ServletContextListener {
 			Scheduler scheduler;
 
 			scheduler = new StdSchedulerFactory().getScheduler();
-			//scheduler.start();
-			//scheduler.scheduleJob(job, trigger1);
+			/*scheduler.start();
+			scheduler.scheduleJob(job, trigger1);*/
 
 		} catch (SchedulerException e) {
 			e.printStackTrace();

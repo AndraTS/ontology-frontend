@@ -39,7 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 @ApplicationScoped
 public class Start {
 	
-	private String alerta = "Alert!!!";
+	private String alerta = "Temperature in [SeraA] is too high!!!";
 	
 	
 		

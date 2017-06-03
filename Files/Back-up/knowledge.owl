@@ -48,16 +48,13 @@
         <NamedIndividual IRI="#BeansConditions"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SeraA"/>
-    </Declaration>
-    <Declaration>
         <NamedIndividual IRI="#Tomatoes"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#TomatoesConditions"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SeraB"/>
+        <NamedIndividual IRI="#SeraNoastraMica"/>
     </Declaration>
     <ClassAssertion>
         <Class IRI="#Plant"/>
@@ -69,7 +66,7 @@
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#GreenHouse"/>
-        <NamedIndividual IRI="#SeraB"/>
+        <NamedIndividual IRI="#SeraNoastraMica"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#Plant"/>
@@ -80,24 +77,19 @@
         <NamedIndividual IRI="#TomatoesConditions"/>
     </ClassAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#growIn"/>
-        <NamedIndividual IRI="#Beans"/>
-        <NamedIndividual IRI="#SeraB"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Beans"/>
         <NamedIndividual IRI="#BeansConditions"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraA"/>
-        <NamedIndividual IRI="#Beans"/>
+        <NamedIndividual IRI="#SeraNoastraMica"/>
+        <NamedIndividual IRI="#Tomatoes"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraB"/>
-        <NamedIndividual IRI="#Beans"/>
+        <ObjectProperty IRI="#growIn"/>
+        <NamedIndividual IRI="#Tomatoes"/>
+        <NamedIndividual IRI="#SeraNoastraMica"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>

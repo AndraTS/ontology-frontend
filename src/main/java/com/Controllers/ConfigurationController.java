@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,17 +27,17 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
-import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import org.semanticweb.owlapi.model.OWLPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.NodeSet;
@@ -46,6 +47,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 import com.Beans.Environment;
 
@@ -162,7 +164,7 @@ public class ConfigurationController implements Serializable {
 
 		FacesMessage message = null;
 		try {
-			updateOntology(getSelectedPlant(), this.environment.getGreenHouseName());
+			updateOntology(getSelectedPlant(), this.environment.getGreenHouseName(), this.environment.getSeedingMoment());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Configuration updated successfully!", null);
 
 		} catch (Exception e) {
@@ -175,7 +177,7 @@ public class ConfigurationController implements Serializable {
 		// test1();
 	}
 
-	private static void updateOntology(String plantName, String greenHouseName)
+	private static void updateOntology(String plantName, String greenHouseName, Date seedingMoment)
 
 			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
 
@@ -184,6 +186,7 @@ public class ConfigurationController implements Serializable {
 		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
 		OWLDataFactory factory = manager.getOWLDataFactory();
+		OWLEntityRemover remover = new OWLEntityRemover(Collections.singleton(myOntology));
 
 		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
 		ConsoleProgressMonitor progressMonitor = new ConsoleProgressMonitor();
@@ -215,11 +218,10 @@ public class ConfigurationController implements Serializable {
 
 		NodeSet<OWLNamedIndividual> housesNodeSet = reasoner.getInstances(greenHouseClass, true);
 		Set<OWLNamedIndividual> houseIndividuals = housesNodeSet.getFlattened();
-		OWLEntityRemover remover = new OWLEntityRemover(Collections.singleton(myOntology));
+
 		for (OWLNamedIndividual ind : houseIndividuals) {
 			remover.visit(ind);
 		}
-		manager.applyChanges(remover.getChanges());
 
 		List<OWLOntologyChange> list = new ArrayList<OWLOntologyChange>(changes);
 		manager.applyChanges(list);
@@ -242,6 +244,17 @@ public class ConfigurationController implements Serializable {
 		for (OWLAxiom a : domainsAndRanges)
 			manager.addAxiom(myOntology, a);
 
+	/*	// update seedingMoment
+		OWLDataProperty seedingMom = factory.getOWLDataProperty(IRI.create(ontologyIRI + "#SeedingMoment"));
+		Set<OWLDataPropertyAssertionAxiom> plantProps = myOntology.getDataPropertyAssertionAxioms(plantInd);
+		for (OWLDataPropertyAssertionAxiom pa : plantProps) {
+			OWLDataProperty p = (OWLDataProperty) pa.getProperty();
+			remover.visit(p);
+		}
+		OWLLiteral dataLiteral = factory.getOWLLiteral("06.10.2010 00:00:00", OWL2Datatype.XSD_DATE_TIME);
+
+		
+	*/	
 		// grow assertion
 		OWLAxiom assertion2 = factory.getOWLObjectPropertyAssertionAxiom(grow, greenHouseInd, plantInd);
 		AddAxiom addAxiomChange2 = new AddAxiom(myOntology, assertion2);
@@ -252,6 +265,7 @@ public class ConfigurationController implements Serializable {
 
 		// save the ontology on the disk
 
+		manager.applyChanges(remover.getChanges());
 		File fileformated = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		File newOntologyFile = fileformated.getAbsoluteFile();
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newOntologyFile));

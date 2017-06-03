@@ -2,9 +2,19 @@ package com.Beans;
 
 public class Plant {
 	
-	private String plantName = "";
+	private String name;
 	private OptimalConditions optimalConditions;
 
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	
 	public OptimalConditions getOptimalConditions() {
 		return optimalConditions;
 	}
@@ -13,12 +23,5 @@ public class Plant {
 		this.optimalConditions = optimalConditions;
 	}
 
-	public String getName() {
-		return plantName;
-	}
-
-	public void setName(String name) {
-		plantName = name;
-	}
 
 }

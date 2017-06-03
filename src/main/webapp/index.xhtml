@@ -26,12 +26,12 @@
 					<p:outputLabel for="greenHouse" value="GreenHouse: " />
 					<p:inputText id="greenHouse"
 						value="#{ConfigurationController.environment.greenHouseName}" />
-					
+
 
 					<p:outputLabel for="plant" value="Plant:" />
 					<p:selectOneMenu id="plant"
 						value="#{ConfigurationController.selectedPlant}"
-						style="width:150px">
+						style="width:170px">
 						<f:selectItem itemLabel="Select a plant" itemValue=""
 							noSelectionOption="true" />
 						<f:selectItems value="#{ConfigurationController.plants}" />
@@ -43,7 +43,7 @@
 
 				</h:panelGrid>
 
-				<p:growl id="growl" life="2000" />
+				<p:growl id="growl" life="3000" />
 				<p:commandButton value="Submit"
 					action="#{ConfigurationController.submitConfiguration}"
 					icon="ui-icon-check" process="@form" update="growl" />
@@ -52,52 +52,85 @@
 
 			<p:tab title="Environment Monitoring">
 
-				<p:panel header="Select the green house" style="margin-bottom:10px;">
-					<h:panelGrid columns="2" cellpadding="5" >
+				<p:panel header="Green house monitoring" style="margin-bottom:10px;">
+					<h:panelGrid columns="4" cellpadding="5">
 						<p:outputLabel for="gH" value="Green House: " />
-						<p:selectOneMenu id="gH" 
-							value="#{MonitoringController.selectedGreenHouse.greenHouseName}" 
-							style="width:150px">
+
+						<p:selectOneMenu id="gH"
+							value="#{MonitoringController.selectedGreenHouse.greenHouseName}"
+							style="width:160px">
 							<p:ajax listener="#{MonitoringController.onGreenHouseChange}"
-								update="dashboard" />
+								update="dashboard splant" process="@this" />
 							<f:selectItem itemLabel="Select Green House" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{MonitoringController.greenHouses}" />
 						</p:selectOneMenu>
+
+
+						<p:outputLabel for="splant" value="Plant: " />
+						<h:outputText id="splant"
+							value="#{MonitoringController.selectedGreenHouse.plant.name}"
+							style="color: blue" />
 					</h:panelGrid>
 
 					<p:separator />
 
-					<p:layout id="dashboard" style="min-width:400px;min-height:400px;">
+					<p:layout id="dashboard" style="min-width:400px;min-height:500px;">
+
 						<p:layoutUnit position="west" resizable="true" size="320">
-							<p:panelGrid columns="2" style="width: 300" >
+							<h:outputText value="Optimal growth conditions:" />
+
+							<p:panelGrid columns="2" style="width: 300; height: 300">
+
 								<f:facet name="header">
-									<p:graphicImage />
+									<p:graphicImage
+										name="/home/andra/git/ontology-frontend/Files/Pictures/Sera.png" />
 								</f:facet>
 
-								<h:outputText value="Temperature Min:"  />
-								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minTemperature}" />
+								<h:outputText value="Temperature Min:" />
+								<h:outputText
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minTemperature}°C"
+									style="color: green" />
 
-								<h:outputText value="Temperature MAx:" />
-								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxTemperature}" />
+								<h:outputText value="Temperature Max:" />
+								<h:outputText
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxTemperature}°C"
+									style="color: green" />
 
-								<h:outputText value="Moisture Min:" />
-								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minMoisture}" />
+								<h:outputText value="Humidity Min:" />
+								<h:outputText
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minMoisture}°C"
+									style="color: green" />
 
-								<h:outputText value="Moisture Max:" />
-								<h:outputText value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxMoisture}" />
+								<h:outputText value="Humidity Max:" />
+								<h:outputText
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxMoisture}°C"
+									style="color: green" />
 							</p:panelGrid>
 						</p:layoutUnit>
 
 						<p:layoutUnit position="center">
+							<p:poll interval="5" listener="#{MonitoringController.readData}"
+								update="charts" />
 
+							<h:form id="charts">
+								<p:chart id="tempChart" type="line"
+									model="#{MonitoringController.temperatureModel}"
+									style="height:300px;" />
+
+
+								<p:chart id="humChart" type="line"
+									model="#{MonitoringController.moistureModel}"
+									style="height:300px;" />
+							</h:form>
 						</p:layoutUnit>
+
 					</p:layout>
 
 				</p:panel>
 
 			</p:tab>
-			<p:tab title="Crop Feedback">
+			<p:tab title="Feedback">
 			</p:tab>
 		</p:tabView>
 	</h:form>
