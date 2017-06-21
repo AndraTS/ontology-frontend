@@ -1,8 +1,10 @@
 package com.Controllers;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -23,8 +26,15 @@ import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.dlsyntax.renderer.DLSyntaxObjectRenderer;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.io.OWLObjectRenderer;
+import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
@@ -34,6 +44,8 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.SWRLRule;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -41,11 +53,18 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
+import org.semanticweb.owlapi.search.EntitySearcher;
 
 import com.Beans.GreenHouse;
 import com.Beans.OptimalConditions;
 import com.Beans.Plant;
 import com.Scheduler.Data;
+import com.clarkparsia.owlapi.explanation.DefaultExplanationGenerator;
+import com.clarkparsia.owlapi.explanation.util.SilentExplanationProgressMonitor;
+
+import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationOrderer;
+import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationOrdererImpl;
+import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationTree;
 
 @ManagedBean(name = "MonitoringController")
 @SessionScoped
@@ -56,15 +75,22 @@ public class MonitoringController {
 	private List<String> greenHouses = new ArrayList<>();
 	private LineChartModel temperatureModel;
 	private LineChartModel moistureModel;
+	private LineChartModel co2Model;
 
-	private final static DateFormat dateFormat = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+	private String alert = " ";
+
+	private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	private final static String knwoledgeOntologyPath = "/home/andra/git/ontology-frontend/Files/knowledge.owl";
 
 	// Methods
 
 	@PostConstruct
-	public void init() throws OWLOntologyCreationException {
+	public void init() throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
 		getGreenHouses();
 		initTemperatureModel();
+		initHumidityModel();
+		initCo2Model();
+		readData();
 	}
 
 	public void onGreenHouseChange() throws OWLOntologyCreationException {
@@ -117,8 +143,10 @@ public class MonitoringController {
 
 		}
 
-		String firstGreenHouseName = greenHouses.get(0);
-		selectedGreenHouse = getGreenHouseByName(firstGreenHouseName);
+		if (greenHouses.size() > 0) {
+			String firstGreenHouseName = greenHouses.get(0);
+			selectedGreenHouse = getGreenHouseByName(firstGreenHouseName);
+		}
 
 		return greenHouses;
 	}
@@ -180,7 +208,10 @@ public class MonitoringController {
 				cond.setMinMoisture(Integer.parseInt(v.getLiteral()));
 			if (xx.equals("Hmax"))
 				cond.setMaxMoisture(Integer.parseInt(v.getLiteral()));
-
+			if (xx.equals("Co2Min"))
+				cond.setMinCo2(Integer.parseInt(v.getLiteral()));
+			if (xx.equals("Co2Max"))
+				cond.setMaxCo2(Integer.parseInt(v.getLiteral()));
 		}
 
 		return cond;
@@ -208,44 +239,15 @@ public class MonitoringController {
 		this.temperatureModel = temperatureModel;
 	}
 
+	public String getAlert() {
+		return alert;
+	}
+
+	public void setAlert(String alert) {
+		this.alert = alert;
+	}
+
 	public LineChartModel getMoistureModel() {
-		int minH = selectedGreenHouse.getPlant().getOptimalConditions().getMinMoisture();
-		int maxH = selectedGreenHouse.getPlant().getOptimalConditions().getMaxMoisture();
-
-		moistureModel = new LineChartModel();
-
-		moistureModel.setTitle("Humidity representation");
-		moistureModel.setLegendPosition("e");
-
-		LineChartSeries series1 = new LineChartSeries();
-		series1.setLabel("Maximum Reccomended");
-		series1.set("2014-01-01 09:00:00", maxH);
-		series1.set("2014-01-01 18:00:00", maxH);
-
-		LineChartSeries series2 = new LineChartSeries();
-		series2.setLabel("Actual Humidity");
-		series2.set("2014-01-01 09:00:00", 66);
-		series2.set("2014-01-01 10:00:00", 66);
-		series2.set("2014-01-01 11:00:00", 67);
-		series2.set("2014-01-01 12:00:00", 68);
-		series2.set("2014-01-01 13:00:00", 69);
-
-		LineChartSeries series3 = new LineChartSeries();
-		series3.setLabel("Minimum Reccomended");
-		series3.set("2014-01-01 09:00:00", minH);
-		series3.set("2014-01-01 18:00:00", minH);
-
-		moistureModel.addSeries(series1);
-		moistureModel.addSeries(series2);
-		moistureModel.addSeries(series3);
-
-		moistureModel.getAxis(AxisType.Y).setLabel("Celsius");
-		DateAxis axis = new DateAxis("");
-		axis.setTickAngle(-50);
-		axis.setMin("2014-01-01 09:00:00");
-		axis.setMax("2014-01-01 18:00:00");
-		axis.setTickFormat("%H:%#M");
-		moistureModel.getAxes().put(AxisType.X, axis);
 
 		return moistureModel;
 
@@ -255,31 +257,125 @@ public class MonitoringController {
 		this.moistureModel = moistureModel;
 	}
 
-	public void readData() throws FileNotFoundException {
+	public LineChartModel getCo2Model() {
+		return co2Model;
+	}
+
+	public void setCo2Model(LineChartModel co2Model) {
+		this.co2Model = co2Model;
+	}
+
+	public void readData() throws FileNotFoundException, OWLOntologyCreationException, OWLOntologyStorageException {
 
 		double avgT = 0;
 		double sT = 0;
+		double avgH = 0;
+		double sH = 0;
+		double avgCo2 = 0;
+		double sCo2 = 0;
 
 		Data.br = new BufferedReader(new FileReader(Data.csvFile));
-		List<String> lines = Data.br.lines().skip(Data.last).limit(5).collect(Collectors.toList());
+		List<String> lines = Data.br.lines().skip(Data.last).limit(Data.inteval).collect(Collectors.toList());
 		if (lines.size() > 0) {
 			for (String l : lines) {
 				String[] p = l.split(Data.cvsSplitBy);
-				System.out.println("GreenHouse [name= " + p[2] + ", TInt =" + p[8] + ", TExt = " + p[3] + ", MInt= "
-						+ p[11] + " ]");
-				sT = sT + Double.parseDouble(p[8]);
+				System.out.println(
+						"GreenHouse [name= " + p[2] + ", TInt =" + p[4] + ", TExt = " + p[3] + ", MInt= " + p[5] + "]");
+				sT = sT + Double.parseDouble(p[4]);
+				sH = sH + Double.parseDouble(p[5]);
+				sCo2 = sCo2 + Double.parseDouble(p[6]);
 			}
-			Data.last = Data.last + 10;
+			Data.last = Data.last + Data.inteval;
 			lines.clear();
 
-			avgT = sT / 5;
+			avgT = sT / Data.inteval;
+			avgH = sH / Data.inteval;
+			avgCo2 = sCo2 / Data.inteval;
+
+			ProcessTemperature(avgT);
 
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
+
 			ChartSeries temp = this.temperatureModel.getSeries().get(1);
 			temp.set(dateFormat.format(now.getTime()), avgT);
+
+			ChartSeries hum = this.moistureModel.getSeries().get(1);
+			hum.set(dateFormat.format(now.getTime()), avgH);
+
+			ChartSeries co2 = this.co2Model.getSeries().get(1);
+			co2.set(dateFormat.format(now.getTime()), avgCo2);
+
+			//set actual values
+			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+			File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
+			OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
+			IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
+			OWLDataFactory factory = manager.getOWLDataFactory();
+			OWLNamedIndividual greenHouseA = factory.getOWLNamedIndividual(ontologyIRI + "#HouseA");
+
+			
+			OWLDataProperty hasActualT = factory.getOWLDataProperty(IRI.create(ontologyIRI + "#hasActualT"));
+			OWLDataPropertyAssertionAxiom dataPropertyAssertion = factory
+	                .getOWLDataPropertyAssertionAxiom(hasActualT, greenHouseA, avgT);
+			AddAxiom ax1 = new AddAxiom(myOntology, dataPropertyAssertion);
+			manager.applyChange(ax1);
+			
+			File fileformated = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
+			File newOntologyFile = fileformated.getAbsoluteFile();
+			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newOntologyFile));
+
+			manager.saveOntology(myOntology, new OWLXMLDocumentFormat(), outputStream);
+
 		} else
 			Data.last = 1;
+	}
+
+	private static OWLObjectRenderer renderer = new DLSyntaxObjectRenderer();
+
+	private void ProcessTemperature(double avgT) throws OWLOntologyCreationException {
+
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
+		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
+		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
+		OWLDataFactory factory = manager.getOWLDataFactory();
+
+		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
+		ConsoleProgressMonitor progressMonitor = new ConsoleProgressMonitor();
+		OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
+		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
+
+		OWLClass plantClass = factory.getOWLClass(ontologyIRI + "#Plant");
+
+		for (OWLNamedIndividual plant : reasoner.getInstances(plantClass, false).getFlattened()) {
+			System.out.println("person : " + renderer.render(plant));
+		}
+
+		OWLNamedIndividual tomatoes = factory.getOWLNamedIndividual(ontologyIRI + "#Tomatoes");
+		OWLObjectProperty growInProperty = factory.getOWLObjectProperty(ontologyIRI + "#growIn");
+		OWLNamedIndividual greenHouseA = factory.getOWLNamedIndividual(ontologyIRI + "#HouseA");
+
+		boolean result = reasoner
+				.isEntailed(factory.getOWLObjectPropertyAssertionAxiom(growInProperty, tomatoes, greenHouseA));
+		System.out.println("Do tomatoes grow in GreenHouseA ? : " + result);
+
+		OWLClass tHighAlertClass = factory.getOWLClass(ontologyIRI + "#THighAlert");
+		OWLClassAssertionAxiom axiomTHigh = factory.getOWLClassAssertionAxiom(tHighAlertClass, greenHouseA);
+		System.out.println("Is the temperature from HouseA too high ? : " + reasoner.isEntailed(axiomTHigh));
+
+		OWLClass tLowAlertClass = factory.getOWLClass(ontologyIRI + "#TLowAlert");
+		OWLClassAssertionAxiom axiomTLow = factory.getOWLClassAssertionAxiom(tLowAlertClass, greenHouseA);
+		System.out.println("Is the temperature from HouseA too low ? : " + reasoner.isEntailed(axiomTLow));
+
+		if (avgT < selectedGreenHouse.getPlant().getOptimalConditions().getMinTemperature())
+			alert = "sasa";
+
+	}
+
+	private static void printIndented(ExplanationTree node, String indent) {
+		OWLAxiom axiom = node.getUserObject();
+		System.out.println(indent + renderer.render(axiom));
 	}
 
 	public void initTemperatureModel() {
@@ -298,29 +394,21 @@ public class MonitoringController {
 		max.setTime(min.getTime());
 		max.add(Calendar.MINUTE, 10);
 
-		LineChartSeries series1 = new LineChartSeries();
-		series1.setLabel("Maximum Reccomended");
-
 		String mi = dateFormat.format(min.getTime());
 		String ma = dateFormat.format(max.getTime());
 
-		series1.set(mi, maxT + 2);
-		series1.set(ma, maxT + 2);
+		LineChartSeries series1 = new LineChartSeries();
+		series1.setLabel("Maximum Reccomended");
+		series1.set(mi, maxT);
+		series1.set(ma, maxT);
 
 		LineChartSeries series2 = new LineChartSeries();
-		series2.setLabel("Actual Temperature");
-
-		/*
-		 * Random random = new Random(); series2.set("2014-01-01 10:00:00",
-		 * random.nextInt(25 - 20 + 1) + 20); series2.set("2014-01-01 11:00:00",
-		 * 23); series2.set("2014-01-01 12:00:00", 25);
-		 * series2.set("2014-01-01 13:00:00", 27);
-		 */
+		series2.setLabel("Current Temperature");
 
 		LineChartSeries series3 = new LineChartSeries();
 		series3.setLabel("Minimum Reccomended");
-		series3.set(mi, minT - 2);
-		series3.set(ma, minT - 2);
+		series3.set(mi, minT);
+		series3.set(ma, minT);
 
 		temperatureModel.addSeries(series1);
 		temperatureModel.addSeries(series2);
@@ -333,6 +421,98 @@ public class MonitoringController {
 		axis.setMax(ma);
 		axis.setTickFormat("%H:%M:%S");
 		temperatureModel.getAxes().put(AxisType.X, axis);
+
+	}
+
+	public void initHumidityModel() {
+		int minH = selectedGreenHouse.getPlant().getOptimalConditions().getMinMoisture();
+		int maxH = selectedGreenHouse.getPlant().getOptimalConditions().getMaxMoisture();
+
+		moistureModel = new LineChartModel();
+
+		moistureModel.setTitle("Humidity representation");
+		moistureModel.setLegendPosition("e");
+
+		Calendar min = Calendar.getInstance();
+		min.setTime(new Date());
+
+		Calendar max = Calendar.getInstance();
+		max.setTime(min.getTime());
+		max.add(Calendar.MINUTE, 10);
+
+		String mi = dateFormat.format(min.getTime());
+		String ma = dateFormat.format(max.getTime());
+
+		LineChartSeries series1 = new LineChartSeries();
+		series1.setLabel("Maximum Reccomended");
+		series1.set(mi, maxH);
+		series1.set(ma, maxH);
+
+		LineChartSeries series2 = new LineChartSeries();
+		series2.setLabel("Current Humidity");
+
+		LineChartSeries series3 = new LineChartSeries();
+		series3.setLabel("Minimum Reccomended");
+		series3.set(mi, minH);
+		series3.set(ma, minH);
+
+		moistureModel.addSeries(series1);
+		moistureModel.addSeries(series2);
+		moistureModel.addSeries(series3);
+
+		moistureModel.getAxis(AxisType.Y).setLabel("Level");
+		DateAxis axis = new DateAxis("");
+		axis.setTickAngle(-50);
+		axis.setMin(mi);
+		axis.setMax(ma);
+		axis.setTickFormat("%H:%M:%S");
+		moistureModel.getAxes().put(AxisType.X, axis);
+
+	}
+
+	public void initCo2Model() {
+		int minCo2 = selectedGreenHouse.getPlant().getOptimalConditions().getMinCo2();
+		int maxCo2 = selectedGreenHouse.getPlant().getOptimalConditions().getMaxCo2();
+
+		co2Model = new LineChartModel();
+
+		co2Model.setTitle("CO2 representation");
+		co2Model.setLegendPosition("e");
+
+		Calendar min = Calendar.getInstance();
+		min.setTime(new Date());
+
+		Calendar max = Calendar.getInstance();
+		max.setTime(min.getTime());
+		max.add(Calendar.MINUTE, 10);
+
+		String mi = dateFormat.format(min.getTime());
+		String ma = dateFormat.format(max.getTime());
+
+		LineChartSeries series1 = new LineChartSeries();
+		series1.setLabel("Maximum Reccomended");
+		series1.set(mi, maxCo2);
+		series1.set(ma, maxCo2);
+
+		LineChartSeries series2 = new LineChartSeries();
+		series2.setLabel("Current CO2 level");
+
+		LineChartSeries series3 = new LineChartSeries();
+		series3.setLabel("Minimum Reccomended");
+		series3.set(mi, minCo2);
+		series3.set(ma, minCo2);
+
+		co2Model.addSeries(series1);
+		co2Model.addSeries(series2);
+		co2Model.addSeries(series3);
+
+		co2Model.getAxis(AxisType.Y).setLabel("PPM");
+		DateAxis axis = new DateAxis("");
+		axis.setTickAngle(-50);
+		axis.setMin(mi);
+		axis.setMax(ma);
+		axis.setTickFormat("%H:%M:%S");
+		co2Model.getAxes().put(AxisType.X, axis);
 
 	}
 }

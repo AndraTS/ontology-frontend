@@ -12,13 +12,37 @@
     <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
+        <Class IRI="#Alert"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CO2HighAlert"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CO2LowAlert"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#GreenHouse"/>
     </Declaration>
     <Declaration>
         <Class IRI="#GrowthConditions"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#HHighAlert"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HLowAlert"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#Plant"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Sugestion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#THighAlert"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TLowAlert"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#grow"/>
@@ -28,6 +52,12 @@
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#has"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Co2Max"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Co2Min"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#Hmax"/>
@@ -42,13 +72,40 @@
         <DataProperty IRI="#Tmin"/>
     </Declaration>
     <Declaration>
+        <DataProperty IRI="#hasActualCO2"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasActualH"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasActualT"/>
+    </Declaration>
+    <Declaration>
         <NamedIndividual IRI="#Beans"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#BeansConditions"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SeraA"/>
+        <NamedIndividual IRI="#CO2High"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#CO2Low"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HHigh"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HLow"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HouseA"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#THigh"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#TLow"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Tomatoes"/>
@@ -57,8 +114,32 @@
         <NamedIndividual IRI="#TomatoesConditions"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SeraB"/>
+        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
     </Declaration>
+    <SubClassOf>
+        <Class IRI="#CO2HighAlert"/>
+        <Class IRI="#Alert"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CO2LowAlert"/>
+        <Class IRI="#Alert"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HHighAlert"/>
+        <Class IRI="#Alert"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HLowAlert"/>
+        <Class IRI="#Alert"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#THighAlert"/>
+        <Class IRI="#Alert"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TLowAlert"/>
+        <Class IRI="#Alert"/>
+    </SubClassOf>
     <ClassAssertion>
         <Class IRI="#Plant"/>
         <NamedIndividual IRI="#Beans"/>
@@ -66,10 +147,38 @@
     <ClassAssertion>
         <Class IRI="#GrowthConditions"/>
         <NamedIndividual IRI="#BeansConditions"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Sugestion"/>
+        <NamedIndividual IRI="#CO2High"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Sugestion"/>
+        <NamedIndividual IRI="#CO2Low"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Sugestion"/>
+        <NamedIndividual IRI="#HHigh"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Sugestion"/>
+        <NamedIndividual IRI="#HLow"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Alert"/>
+        <NamedIndividual IRI="#HouseA"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#GreenHouse"/>
-        <NamedIndividual IRI="#SeraB"/>
+        <NamedIndividual IRI="#HouseA"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Sugestion"/>
+        <NamedIndividual IRI="#THigh"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Sugestion"/>
+        <NamedIndividual IRI="#TLow"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#Plant"/>
@@ -80,30 +189,35 @@
         <NamedIndividual IRI="#TomatoesConditions"/>
     </ClassAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#growIn"/>
-        <NamedIndividual IRI="#Beans"/>
-        <NamedIndividual IRI="#SeraB"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Beans"/>
         <NamedIndividual IRI="#BeansConditions"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraA"/>
-        <NamedIndividual IRI="#Beans"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <NamedIndividual IRI="#Tomatoes"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraB"/>
-        <NamedIndividual IRI="#Beans"/>
+        <ObjectProperty IRI="#growIn"/>
+        <NamedIndividual IRI="#Tomatoes"/>
+        <NamedIndividual IRI="#HouseA"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Tomatoes"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
     </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Max"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Min"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1200</Literal>
+    </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#Hmax"/>
         <NamedIndividual IRI="#BeansConditions"/>
@@ -125,14 +239,149 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">20.889999999999997</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">20.999999999999996</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.08</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.150000000000002</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.179999999999996</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.21</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.24</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.240000000000002</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.270000000000003</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.349999999999998</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">21.779999999999998</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">22.060000000000002</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">22.669999999999998</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">23.6</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">26.240000000000002</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">27.43</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">28.560000000000002</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">28.610000000000003</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">30.830000000000002</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">30.879999999999995</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">31.139999999999997</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">31.419999999999998</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">33.11</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#double">33.75</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasActualT"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">15</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Max"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Min"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
         <DataProperty IRI="#Hmax"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">70</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">80</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#Hmin"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">65</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">60</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#Tmax"/>
@@ -165,6 +414,14 @@
         <Class IRI="#GrowthConditions"/>
     </ObjectPropertyRange>
     <DataPropertyDomain>
+        <DataProperty IRI="#Co2Max"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#Co2Min"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
         <DataProperty IRI="#Hmax"/>
         <Class IRI="#GrowthConditions"/>
     </DataPropertyDomain>
@@ -180,6 +437,18 @@
         <DataProperty IRI="#Tmin"/>
         <Class IRI="#GrowthConditions"/>
     </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#hasActualT"/>
+        <Class IRI="#GreenHouse"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#Co2Max"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#Co2Min"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#Hmax"/>
         <Datatype abbreviatedIRI="xsd:int"/>
@@ -196,10 +465,324 @@
         <DataProperty IRI="#Tmin"/>
         <Datatype abbreviatedIRI="xsd:int"/>
     </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#hasActualT"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">CO2HighRule</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualCO2"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#c"/>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#grow"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#p"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#has"/>
+                <Variable IRI="#p"/>
+                <Variable IRI="#oc"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#Co2Max"/>
+                <Variable IRI="#oc"/>
+                <Variable IRI="#cm"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThan">
+                <Variable IRI="#c"/>
+                <Variable IRI="#cm"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#CO2HighAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">CO2LowRule</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualCO2"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#c"/>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#grow"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#p"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#has"/>
+                <Variable IRI="#p"/>
+                <Variable IRI="#oc"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#Co2Min"/>
+                <Variable IRI="#oc"/>
+                <Variable IRI="#cm"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThan">
+                <Variable IRI="#c"/>
+                <Variable IRI="#cm"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#CO2LowAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">HLowRule</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualH"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#h"/>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#grow"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#p"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#has"/>
+                <Variable IRI="#p"/>
+                <Variable IRI="#oc"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#Hmax"/>
+                <Variable IRI="#oc"/>
+                <Variable IRI="#hm"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThan">
+                <Variable IRI="#t"/>
+                <Variable IRI="#hm"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#HLowAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">HHighRule</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualH"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#h"/>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#grow"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#p"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#has"/>
+                <Variable IRI="#p"/>
+                <Variable IRI="#oc"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#Hmin"/>
+                <Variable IRI="#oc"/>
+                <Variable IRI="#hm"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThan">
+                <Variable IRI="#t"/>
+                <Variable IRI="#hm"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#HHighAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">THighRule</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualT"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#t"/>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#grow"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#p"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#has"/>
+                <Variable IRI="#p"/>
+                <Variable IRI="#oc"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#Tmax"/>
+                <Variable IRI="#oc"/>
+                <Variable IRI="#tm"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThan">
+                <Variable IRI="#t"/>
+                <Variable IRI="#tm"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#THighAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">TLowRule</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualT"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#t"/>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#grow"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#p"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#has"/>
+                <Variable IRI="#p"/>
+                <Variable IRI="#oc"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#Tmin"/>
+                <Variable IRI="#oc"/>
+                <Variable IRI="#tm"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThan">
+                <Variable IRI="#t"/>
+                <Variable IRI="#tm"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#TLowAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#THigh</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Stop the heating system. Start the ventilation.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#TLow</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Start the heating system.</Literal>
+    </AnnotationAssertion>
 </Ontology>
 
 
 
-<!-- Generated by the OWL API (version 5.0.5) https://github.com/owlcs/owlapi/ -->
+<!-- Generated by the OWL API (version 5.1.0.2017-03-29T23:31:42Z) https://github.com/owlcs/owlapi/ -->
 
 

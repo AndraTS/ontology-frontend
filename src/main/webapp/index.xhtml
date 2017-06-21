@@ -16,9 +16,10 @@
 	<h1 class="title ui-widget-header ui-corner-all"
 		style="text-align: center">Welcome</h1>
 
+	<h:form id="alerts">
 
-	<h1 style="color: red">#{Start.alerta}</h1>
 
+	</h:form>
 	<h:form id="form">
 		<p:tabView dynamic="true" cache="false">
 			<p:tab id="t1" title="Environment Configuration">
@@ -41,6 +42,10 @@
 					<p:calendar id="seedingMoment"
 						value="#{ConfigurationController.environment.seedingMoment}" />
 
+
+					<p:outputLabel for="expectation" value="Expectations: " />
+					<p:inputText id="expectation"
+						value="#{ConfigurationController.environment.expectations}" />
 				</h:panelGrid>
 
 				<p:growl id="growl" life="3000" />
@@ -89,39 +94,53 @@
 
 								<h:outputText value="Temperature Min:" />
 								<h:outputText
-									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minTemperature}°C"
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minTemperature} °C"
 									style="color: green" />
 
 								<h:outputText value="Temperature Max:" />
 								<h:outputText
-									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxTemperature}°C"
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxTemperature} °C"
 									style="color: green" />
 
 								<h:outputText value="Humidity Min:" />
 								<h:outputText
-									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minMoisture}°C"
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minMoisture} %"
 									style="color: green" />
 
 								<h:outputText value="Humidity Max:" />
 								<h:outputText
-									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxMoisture}°C"
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxMoisture} %"
+									style="color: green" />
+
+								<h:outputText value="CO2 Min:" />
+								<h:outputText
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.minCo2} PPM"
+									style="color: green" />
+
+								<h:outputText value="CO2 Max:" />
+								<h:outputText
+									value="#{MonitoringController.selectedGreenHouse.plant.optimalConditions.maxCo2} PPM"
 									style="color: green" />
 							</p:panelGrid>
 						</p:layoutUnit>
 
 						<p:layoutUnit position="center">
+
 							<p:poll interval="5" listener="#{MonitoringController.readData}"
-								update="charts" />
+								update="charts, alerts" />
 
 							<h:form id="charts">
+								<h:outputText value="#{MonitoringController.alert}" />
 								<p:chart id="tempChart" type="line"
 									model="#{MonitoringController.temperatureModel}"
 									style="height:300px;" />
 
-
 								<p:chart id="humChart" type="line"
 									model="#{MonitoringController.moistureModel}"
 									style="height:300px;" />
+
+								<p:chart id="co2Chart" type="line"
+									model="#{MonitoringController.co2Model}" style="height:300px;" />
 							</h:form>
 						</p:layoutUnit>
 

@@ -30,6 +30,12 @@
         <ObjectProperty IRI="#has"/>
     </Declaration>
     <Declaration>
+        <DataProperty IRI="#Co2Max"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Co2Min"/>
+    </Declaration>
+    <Declaration>
         <DataProperty IRI="#Hmax"/>
     </Declaration>
     <Declaration>
@@ -48,16 +54,13 @@
         <NamedIndividual IRI="#BeansConditions"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SeraA"/>
-    </Declaration>
-    <Declaration>
         <NamedIndividual IRI="#Tomatoes"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#TomatoesConditions"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SeraB"/>
+        <NamedIndividual IRI="#HouseA"/>
     </Declaration>
     <ClassAssertion>
         <Class IRI="#Plant"/>
@@ -69,7 +72,7 @@
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#GreenHouse"/>
-        <NamedIndividual IRI="#SeraB"/>
+        <NamedIndividual IRI="#HouseA"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#Plant"/>
@@ -80,30 +83,35 @@
         <NamedIndividual IRI="#TomatoesConditions"/>
     </ClassAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#growIn"/>
-        <NamedIndividual IRI="#Beans"/>
-        <NamedIndividual IRI="#SeraB"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Beans"/>
         <NamedIndividual IRI="#BeansConditions"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraA"/>
-        <NamedIndividual IRI="#Beans"/>
+        <NamedIndividual IRI="#HouseA"/>
+        <NamedIndividual IRI="#Tomatoes"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraB"/>
-        <NamedIndividual IRI="#Beans"/>
+        <ObjectProperty IRI="#growIn"/>
+        <NamedIndividual IRI="#Tomatoes"/>
+        <NamedIndividual IRI="#HouseA"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Tomatoes"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
     </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Max"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Min"/>
+        <NamedIndividual IRI="#BeansConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1200</Literal>
+    </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#Hmax"/>
         <NamedIndividual IRI="#BeansConditions"/>
@@ -123,6 +131,16 @@
         <DataProperty IRI="#Tmin"/>
         <NamedIndividual IRI="#BeansConditions"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Max"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Co2Min"/>
+        <NamedIndividual IRI="#TomatoesConditions"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1200</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#Hmax"/>
@@ -165,6 +183,14 @@
         <Class IRI="#GrowthConditions"/>
     </ObjectPropertyRange>
     <DataPropertyDomain>
+        <DataProperty IRI="#Co2Max"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#Co2Min"/>
+        <Class IRI="#GrowthConditions"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
         <DataProperty IRI="#Hmax"/>
         <Class IRI="#GrowthConditions"/>
     </DataPropertyDomain>
@@ -180,6 +206,14 @@
         <DataProperty IRI="#Tmin"/>
         <Class IRI="#GrowthConditions"/>
     </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#Co2Max"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#Co2Min"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#Hmax"/>
         <Datatype abbreviatedIRI="xsd:int"/>

@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/andra/semantics"
+     xml:base="http://www.semanticweb.org/andra/semantics"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:semantics="http://www.semanticweb.org/andra/semantics#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/andra/semantics"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#grow -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/semantics#grow">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/andra/semantics#growIn"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GreenHouse"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#growIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/semantics#growIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#Plant"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#has -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/andra/semantics#has">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#Plant"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Co2Max -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/semantics#Co2Max">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Co2Min -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/semantics#Co2Min">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Hmax -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/semantics#Hmax">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Hmin -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/semantics#Hmin">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Tmax -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/semantics#Tmax">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Tmin -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/andra/semantics#Tmin">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#GreenHouse -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/semantics#GreenHouse"/>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#GrowthConditions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Plant -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/andra/semantics#Plant"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Beans -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/semantics#Beans">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/semantics#Plant"/>
+        <semantics:has rdf:resource="http://www.semanticweb.org/andra/semantics#BeansConditions"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#BeansConditions -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/semantics#BeansConditions">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <semantics:Co2Max rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1500</semantics:Co2Max>
+        <semantics:Co2Min rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1200</semantics:Co2Min>
+        <semantics:Hmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</semantics:Hmax>
+        <semantics:Hmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</semantics:Hmin>
+        <semantics:Tmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</semantics:Tmax>
+        <semantics:Tmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</semantics:Tmin>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#GreenHouseA -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/semantics#GreenHouseA">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/semantics#GreenHouse"/>
+        <semantics:grow rdf:resource="http://www.semanticweb.org/andra/semantics#Tomatoes"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#Tomatoes -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/semantics#Tomatoes">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/semantics#Plant"/>
+        <semantics:growIn rdf:resource="http://www.semanticweb.org/andra/semantics#GreenHouseA"/>
+        <semantics:has rdf:resource="http://www.semanticweb.org/andra/semantics#TomatoesConditions"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/andra/semantics#TomatoesConditions -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/andra/semantics#TomatoesConditions">
+        <rdf:type rdf:resource="http://www.semanticweb.org/andra/semantics#GrowthConditions"/>
+        <semantics:Co2Max rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1500</semantics:Co2Max>
+        <semantics:Co2Min rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1200</semantics:Co2Min>
+        <semantics:Hmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</semantics:Hmax>
+        <semantics:Hmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">65</semantics:Hmin>
+        <semantics:Tmax rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</semantics:Tmax>
+        <semantics:Tmin rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</semantics:Tmin>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+

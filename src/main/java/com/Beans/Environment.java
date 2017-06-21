@@ -17,8 +17,15 @@ public class Environment {
 	private Date endGermination;
 	private Date startVegetation;
 	private Date endVegetation;
+	private String expectations;
 	
 	
+	public String getExpectations() {
+		return expectations;
+	}
+	public void setExpectations(String expectations) {
+		this.expectations = expectations;
+	}
 	public String getGreenHouseName() {
 		return greenHouseName;
 	}
