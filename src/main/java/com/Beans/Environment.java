@@ -18,8 +18,15 @@ public class Environment {
 	private Date startVegetation;
 	private Date endVegetation;
 	private String expectations;
+	private String surface;
 	
 	
+	public String getSurface() {
+		return surface;
+	}
+	public void setSurface(String surface) {
+		this.surface = surface;
+	}
 	public String getExpectations() {
 		return expectations;
 	}

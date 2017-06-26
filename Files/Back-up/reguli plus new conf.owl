@@ -6,148 +6,138 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      ontologyIRI="http://www.semanticweb.org/andra/semantics">
+    <Prefix name="" IRI="http://www.semanticweb.org/andra/semantics"/>
     <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
     <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Prefix name="semantics" IRI="http://www.semanticweb.org/andra/semantics#"/>
     <Declaration>
-        <Class IRI="#Alert"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#CO2HighAlert"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#CO2LowAlert"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#GreenHouse"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#GrowthConditions"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#HHighAlert"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#HLowAlert"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Plant"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Sugestion"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#THighAlert"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#TLowAlert"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#grow"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#growIn"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#hasSugestion"/>
+        <DataProperty IRI="#hasSeedingMoment"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#Co2Max"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#Co2Min"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#Hmax"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#Hmin"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#Tmax"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#Tmin"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasActualCO2"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasActualH"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasActualT"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasExtT"/>
+        <NamedIndividual IRI="#ttt"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#hasProduction"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#hasSeedingMoment"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasSuggestionText"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasSurface"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#seedsNeeded"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#seedsRecQuantity"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#timeUntilHarvest"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Beans"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#BeansConditions"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#CO2High"/>
+        <NamedIndividual IRI="#TLow"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#CO2Low"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#CloseWindow"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#HHigh"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#HLow"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#OpenWindow"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#THigh"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#TLow"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Tomatoes"/>
+        <Class IRI="#Plant"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#TomatoesConditions"/>
     </Declaration>
     <Declaration>
+        <DataProperty IRI="#hasExtT"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#OpenWindow"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BeansConditions"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CO2HighAlert"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#THigh"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GrowthConditions"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#CloseWindow"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Tomatoes"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Beans"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Hmin"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Tmin"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GreenHouse"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasActualT"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HLowAlert"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CO2LowAlert"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#growIn"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Hmax"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TLowAlert"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#CO2High"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HLow"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Co2Min"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasSurface"/>
+    </Declaration>
+    <Declaration>
         <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HHighAlert"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Sugestion"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HHigh"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Tmax"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Alert"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasActualCO2"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasSugestion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#THighAlert"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#grow"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasActualH"/>
     </Declaration>
     <SubClassOf>
         <Class IRI="#CO2HighAlert"/>
@@ -206,10 +196,6 @@
         <NamedIndividual IRI="#OpenWindow"/>
     </ClassAssertion>
     <ClassAssertion>
-        <Class IRI="#GreenHouse"/>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
-    </ClassAssertion>
-    <ClassAssertion>
         <Class IRI="#Sugestion"/>
         <NamedIndividual IRI="#THigh"/>
     </ClassAssertion>
@@ -225,25 +211,29 @@
         <Class IRI="#GrowthConditions"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
     </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#GreenHouse"/>
+        <NamedIndividual IRI="#ttt"/>
+    </ClassAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Beans"/>
         <NamedIndividual IRI="#BeansConditions"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#grow"/>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
-        <NamedIndividual IRI="#Tomatoes"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#growIn"/>
         <NamedIndividual IRI="#Tomatoes"/>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
+        <NamedIndividual IRI="#ttt"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has"/>
         <NamedIndividual IRI="#Tomatoes"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#grow"/>
+        <NamedIndividual IRI="#ttt"/>
+        <NamedIndividual IRI="#Tomatoes"/>
     </ObjectPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#Co2Max"/>
@@ -276,36 +266,6 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#hasActualT"/>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">22</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#hasSeedingMoment"/>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Sun Jun 04 00:00:00 EEST 2017</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#hasSurface"/>
-        <NamedIndividual IRI="#SeraNoastraMica"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#hasSuggestionText"/>
-        <NamedIndividual IRI="#THigh"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">lala</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#seedsNeeded"/>
-        <NamedIndividual IRI="#Tomatoes"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1500</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#timeUntilHarvest"/>
-        <NamedIndividual IRI="#Tomatoes"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">120</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#Co2Max"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1500</Literal>
@@ -334,6 +294,11 @@
         <DataProperty IRI="#Tmin"/>
         <NamedIndividual IRI="#TomatoesConditions"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">18</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasSurface"/>
+        <NamedIndividual IRI="#ttt"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">456</Literal>
     </DataPropertyAssertion>
     <InverseObjectProperties>
         <ObjectProperty IRI="#grow"/>
@@ -412,20 +377,8 @@
         <Class IRI="#GreenHouse"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
-        <DataProperty IRI="#hasSuggestionText"/>
-        <Class IRI="#Sugestion"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
         <DataProperty IRI="#hasSurface"/>
         <Class IRI="#GreenHouse"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#seedsNeeded"/>
-        <Class IRI="#Plant"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#timeUntilHarvest"/>
-        <Class IRI="#Plant"/>
     </DataPropertyDomain>
     <DataPropertyRange>
         <DataProperty IRI="#Co2Max"/>
@@ -473,23 +426,11 @@
     </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#hasSeedingMoment"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#hasSuggestionText"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
+        <Datatype abbreviatedIRI="xsd:dateTime"/>
     </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#hasSurface"/>
-        <Datatype abbreviatedIRI="xsd:int"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#seedsNeeded"/>
-        <Datatype abbreviatedIRI="xsd:int"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#timeUntilHarvest"/>
-        <Datatype abbreviatedIRI="xsd:int"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <DLSafeRule>
         <Annotation>
@@ -657,6 +598,51 @@
         </Annotation>
         <Annotation>
             <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SugestionTHigh2</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#GreenHouse"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasActualT"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#t"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#THighAlert"/>
+                <Variable IRI="#g"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasExtT"/>
+                <Variable IRI="#g"/>
+                <Variable IRI="#e"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThan">
+                <Variable IRI="#e"/>
+                <Variable IRI="#t"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasSugestion"/>
+                <Variable IRI="#g"/>
+                <NamedIndividual IRI="#OpenWindow"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
             <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SugestionTLow</Literal>
         </Annotation>
         <Body>
@@ -675,58 +661,6 @@
                 <Variable IRI="#g"/>
                 <NamedIndividual IRI="#TLow"/>
             </ObjectPropertyAtom>
-        </Head>
-    </DLSafeRule>
-    <DLSafeRule>
-        <Annotation>
-            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SeedsNeededRule</Literal>
-        </Annotation>
-        <Body>
-            <ClassAtom>
-                <Class IRI="#GreenHouse"/>
-                <Variable IRI="#g"/>
-            </ClassAtom>
-            <ObjectPropertyAtom>
-                <ObjectProperty IRI="#grow"/>
-                <Variable IRI="#g"/>
-                <Variable IRI="#p"/>
-            </ObjectPropertyAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#hasSurface"/>
-                <Variable IRI="#g"/>
-                <Variable IRI="#s"/>
-            </DataPropertyAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#seedsNeeded"/>
-                <Variable IRI="#p"/>
-                <Variable IRI="#need"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#multiply">
-                <Variable IRI="#m"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#needed"/>
-            </BuiltInAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#divide">
-                <Variable IRI="#r"/>
-                <Variable IRI="#m"/>
-                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">10000</Literal>
-            </BuiltInAtom>
-        </Body>
-        <Head>
-            <DataPropertyAtom>
-                <DataProperty IRI="#seedsRecQuantity"/>
-                <Variable IRI="#g"/>
-                <Variable IRI="#r"/>
-            </DataPropertyAtom>
         </Head>
     </DLSafeRule>
     <DLSafeRule>
@@ -940,51 +874,6 @@
         </Annotation>
         <Annotation>
             <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SugestionTHigh2</Literal>
-        </Annotation>
-        <Body>
-            <ClassAtom>
-                <Class IRI="#GreenHouse"/>
-                <Variable IRI="#g"/>
-            </ClassAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#hasActualT"/>
-                <Variable IRI="#g"/>
-                <Variable IRI="#t"/>
-            </DataPropertyAtom>
-            <ClassAtom>
-                <Class IRI="#THighAlert"/>
-                <Variable IRI="#g"/>
-            </ClassAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#hasExtT"/>
-                <Variable IRI="#g"/>
-                <Variable IRI="#e"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThan">
-                <Variable IRI="#e"/>
-                <Variable IRI="#t"/>
-            </BuiltInAtom>
-        </Body>
-        <Head>
-            <ObjectPropertyAtom>
-                <ObjectProperty IRI="#hasSugestion"/>
-                <Variable IRI="#g"/>
-                <NamedIndividual IRI="#OpenWindow"/>
-            </ObjectPropertyAtom>
-        </Head>
-    </DLSafeRule>
-    <DLSafeRule>
-        <Annotation>
-            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
             <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">RuleTHigh</Literal>
         </Annotation>
         <Body>
@@ -1088,6 +977,5 @@
 
 
 
-<!-- Generated by the OWL API (version 5.1.0.2017-03-29T23:31:42Z) https://github.com/owlcs/owlapi/ -->
-
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
 

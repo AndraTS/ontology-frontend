@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -26,6 +31,9 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
@@ -48,13 +56,62 @@ import org.semanticweb.owlapi.util.OWLEntityRemover;
 import com.Beans.Environment;
 
 @ManagedBean(name = "ConfigurationController")
-@SessionScoped
+@ViewScoped
 public class ConfigurationController implements Serializable {
+
+	private final static String knwoledgeOntologyPath = "/home/andra/git/ontology-frontend/Files/knowledge.owl";
 
 	// Properties
 	private Environment environment = new Environment();
 	private List<String> plants = new ArrayList<>();
 	private String selectedPlant = "";
+	private String selectedPlantType = "Cherry";
+	private List<String> plantTypes = new ArrayList<>();
+	private String quantityOfSeeds;
+	private Date harvestTime;
+	
+	
+	public Date getHarvestTime() {
+		return harvestTime;
+	}
+
+	public void setHarvestTime(Date harvestTime) {
+		this.harvestTime = harvestTime;
+	}
+
+	public String getQuantityOfSeeds() {
+		return quantityOfSeeds;
+	}
+
+	public void setQuantityOfSeeds(String quantityOfSeeds) {
+		this.quantityOfSeeds = quantityOfSeeds;
+	}
+
+	public List<String> getPlantTypes(String p) {
+		plantTypes.clear();
+		if (p.equals("Beans")) {
+			plantTypes.add("GreenBeans");
+			plantTypes.add("YellowBeans");
+
+		} else if (p.equals("Tomatoes")) {
+			plantTypes.add("Cherry");
+			plantTypes.add("Roma");
+		}
+		return plantTypes;
+	}
+
+	public void setPlantTypes(List<String> plantTypes) {
+		this.plantTypes = plantTypes;
+	}
+
+	public String getSelectedPlantType() {
+
+		return selectedPlantType;
+	}
+
+	public void setSelectedPlantType(String selectedPlantType) {
+		this.selectedPlantType = selectedPlantType;
+	}
 
 	public String getSelectedPlant() {
 		return selectedPlant;
@@ -65,12 +122,13 @@ public class ConfigurationController implements Serializable {
 	}
 
 	@PostConstruct
-	public void init() throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
+	public void init()
+			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException, ParseException {
 
 		this.environment = ReadConfigurationFromOntology();
 	}
 
-	private Environment ReadConfigurationFromOntology() throws OWLOntologyCreationException {
+	private Environment ReadConfigurationFromOntology() throws OWLOntologyCreationException, ParseException {
 
 		Environment env = new Environment();
 
@@ -105,35 +163,32 @@ public class ConfigurationController implements Serializable {
 			OWLObjectProperty grow = factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#grow"));
 			NodeSet<OWLNamedIndividual> houseValues = reasoner.getObjectPropertyValues(ind, grow);
 			Set<OWLNamedIndividual> values = houseValues.getFlattened();
-			for (OWLNamedIndividual gh : values) {
-				env.setPlantName(gh.getIRI().getShortForm().toString());
-				setSelectedPlant(gh.getIRI().getShortForm().toString());
+			for (OWLNamedIndividual pl : values) {
+				env.setPlantName(pl.getIRI().getShortForm().toString());
+				setSelectedPlant(pl.getIRI().getShortForm().toString());
+
+			}
+			Set<OWLDataPropertyAssertionAxiom> properties = myOntology.getDataPropertyAssertionAxioms(ind);
+			for (OWLDataPropertyAssertionAxiom pa : properties) {
+				OWLDataProperty p = (OWLDataProperty) pa.getProperty();
+				String xx = p.getIRI().getShortForm().toString();
+				OWLLiteral v = pa.getObject();
+
+				if (xx.equals("hasSurface"))
+					env.setSurface(v.getLiteral());
+
+				if (xx.equals("hasSeedingMoment")) {
+
+					String string = v.getLiteral();
+					SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
+					Date date = format.parse(string);
+					env.setSeedingMoment(date);
+				}
 			}
 
 		}
+		ComputeSuggestions(env);
 
-		/*
-		 * OWLClass plant = factory.getOWLClass(IRI.create(ontologyIRI +
-		 * "#Plant")); NodeSet<OWLNamedIndividual> individualsNodeSet =
-		 * reasoner.getInstances(plant, true); Set<OWLNamedIndividual>
-		 * individuals = individualsNodeSet.getFlattened();
-		 * System.out.println("Instances of plant: "); for (OWLNamedIndividual
-		 * ind : individuals) { System.out.println("    " +
-		 * ind.getIRI().getShortForm());
-		 * env.setPlantName(ind.getIRI().getShortForm().toString());
-		 * OWLObjectProperty growIn =
-		 * factory.getOWLObjectProperty(IRI.create(ontologyIRI + "#growIn"));
-		 * 
-		 * NodeSet<OWLNamedIndividual> houseValuesNodeSet =
-		 * reasoner.getObjectPropertyValues(ind, growIn);
-		 * Set<OWLNamedIndividual> values = houseValuesNodeSet.getFlattened();
-		 * System.out.println("The GrowIn property values for Tomatoes:"); for
-		 * (OWLNamedIndividual gh : values) { System.out.println("    " +
-		 * gh.getIRI().getShortForm());
-		 * env.setGreenHouseName(gh.getIRI().getShortForm().toString()); }
-		 * 
-		 * }
-		 */
 		return env;
 	}
 
@@ -156,11 +211,11 @@ public class ConfigurationController implements Serializable {
 	}
 
 	public void submitConfiguration()
-			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
+			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException, ParseException {
 
 		FacesMessage message = null;
 		try {
-			updateOntology(getSelectedPlant(), this.environment.getGreenHouseName(), this.environment.getSeedingMoment());
+			updateOntology();
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Configuration updated successfully!", null);
 
 		} catch (Exception e) {
@@ -169,13 +224,61 @@ public class ConfigurationController implements Serializable {
 		} finally {
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
-
-		// test1();
+		ComputeSuggestions(environment);
 	}
 
-	private static void updateOntology(String plantName, String greenHouseName, Date seedingMoment)
+	private void ComputeSuggestions(Environment env) throws OWLOntologyCreationException, ParseException {
+
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
+		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
+		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
+		OWLDataFactory factory = manager.getOWLDataFactory();
+
+		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
+		ConsoleProgressMonitor progressMonitor = new ConsoleProgressMonitor();
+		OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
+		OWLReasoner reasoner = reasonerFactory.createReasoner(myOntology, config);
+		reasoner.precomputeInferences();
+
+		OWLNamedIndividual plantInd = factory.getOWLNamedIndividual(ontologyIRI + "#" + selectedPlant);
+		Set<OWLDataPropertyAssertionAxiom> properties = myOntology.getDataPropertyAssertionAxioms(plantInd);
+		for (OWLDataPropertyAssertionAxiom pa : properties) {
+			OWLDataProperty p = (OWLDataProperty) pa.getProperty();
+			String xx = p.getIRI().getShortForm().toString();
+			OWLLiteral v = pa.getObject();
+
+			if (xx.equals("seedsNeeded")){
+				String reccomended = v.getLiteral();
+				String surface = env.getSurface();
+				int compted = Integer.parseInt(reccomended) *Integer.parseInt(surface) /10000;
+				setQuantityOfSeeds(compted + "");
+			}
+			
+			if (xx.equals("timeUntilHarvest")){
+				String time = v.getLiteral();
+				int days = Integer.parseInt(time);
+				Date seedingMoment = env.getSeedingMoment();
+				
+				Calendar cal = Calendar.getInstance(); 
+				cal.setTime(seedingMoment); 
+				cal.add(Calendar.DATE, days);
+				Date harvestTime = cal.getTime();
+				setHarvestTime(harvestTime);
+			}
+		}
+
+	}
+
+	private void updateOntology()
 
 			throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
+
+		String plantName = getSelectedPlant();
+		String greenHouseName = this.environment.getGreenHouseName();
+		String surface = this.environment.getSurface();
+		Date seedingMoment = this.environment.getSeedingMoment();
+		String plantType = getSelectedPlantType();
 
 		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -229,46 +332,56 @@ public class ConfigurationController implements Serializable {
 		OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(greenHouseClass, greenHouseInd);
 		manager.addAxiom(myOntology, ax);
 
+		OWLClassAssertionAxiom ax2 = factory.getOWLClassAssertionAxiom(plantClass, plantInd);
+		manager.addAxiom(myOntology, ax2);
+
 		OWLObjectPropertyDomainAxiom growInAx = factory.getOWLObjectPropertyDomainAxiom(growIn, plantClass);
 		manager.addAxiom(myOntology, growInAx);
 
 		OWLObjectProperty grow = factory.getOWLObjectProperty(ontologyIRI + "#grow");
 		manager.addAxiom(myOntology, factory.getOWLInverseObjectPropertiesAxiom(growIn, grow));
 
+		OWLDataProperty hasSurface = factory.getOWLDataProperty(IRI.create(ontologyIRI + "#hasSurface"));
+		OWLDataPropertyAssertionAxiom dataPropertyAssertion = factory.getOWLDataPropertyAssertionAxiom(hasSurface,
+				greenHouseInd, Integer.parseInt(surface));
+		AddAxiom ax1 = new AddAxiom(myOntology, dataPropertyAssertion);
+		manager.applyChange(ax1);
+
+		OWLDataProperty hasSeedingMoment = factory.getOWLDataProperty(IRI.create(ontologyIRI + "#hasSeedingMoment"));
+		OWLDataPropertyAssertionAxiom dataPropertyAssertion2 = factory
+				.getOWLDataPropertyAssertionAxiom(hasSeedingMoment, greenHouseInd, seedingMoment.toString());
+		AddAxiom axx2 = new AddAxiom(myOntology, dataPropertyAssertion2);
+		manager.applyChange(axx2);
+
 		Set<OWLAxiom> domainsAndRanges = new HashSet<OWLAxiom>();
 		domainsAndRanges.add(factory.getOWLObjectPropertyDomainAxiom(grow, greenHouseClass));
 		for (OWLAxiom a : domainsAndRanges)
 			manager.addAxiom(myOntology, a);
 
-	/*	// update seedingMoment
-		OWLDataProperty seedingMom = factory.getOWLDataProperty(IRI.create(ontologyIRI + "#SeedingMoment"));
-		Set<OWLDataPropertyAssertionAxiom> plantProps = myOntology.getDataPropertyAssertionAxioms(plantInd);
-		for (OWLDataPropertyAssertionAxiom pa : plantProps) {
-			OWLDataProperty p = (OWLDataProperty) pa.getProperty();
-			remover.visit(p);
-		}
-		OWLLiteral dataLiteral = factory.getOWLLiteral("06.10.2010 00:00:00", OWL2Datatype.XSD_DATE_TIME);
-
-		
-	*/	
+		/*
+		 * // update seedingMoment OWLDataProperty seedingMom =
+		 * factory.getOWLDataProperty(IRI.create(ontologyIRI +
+		 * "#SeedingMoment")); Set<OWLDataPropertyAssertionAxiom> plantProps =
+		 * myOntology.getDataPropertyAssertionAxioms(plantInd); for
+		 * (OWLDataPropertyAssertionAxiom pa : plantProps) { OWLDataProperty p =
+		 * (OWLDataProperty) pa.getProperty(); remover.visit(p); } OWLLiteral
+		 * dataLiteral = factory.getOWLLiteral("06.10.2010 00:00:00",
+		 * OWL2Datatype.XSD_DATE_TIME);
+		 * 
+		 * 
+		 */
 		// grow assertion
 		OWLAxiom assertion2 = factory.getOWLObjectPropertyAssertionAxiom(grow, greenHouseInd, plantInd);
 		AddAxiom addAxiomChange2 = new AddAxiom(myOntology, assertion2);
 		manager.applyChange(addAxiomChange2);
 
-		// createProperty("#growIn", beans, greenHouse1, manager, factory,
-		// ontologyIRI, myOntology);
-
-		// save the ontology on the disk
-
 		manager.applyChanges(remover.getChanges());
-		File fileformated = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
+		File fileformated = new File(knwoledgeOntologyPath);
 		File newOntologyFile = fileformated.getAbsoluteFile();
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newOntologyFile));
 
 		manager.saveOntology(myOntology, new OWLXMLDocumentFormat(), outputStream);
-
-		// manager.saveOntology(myOntology);
+		
 	}
 
 	private static void test1()

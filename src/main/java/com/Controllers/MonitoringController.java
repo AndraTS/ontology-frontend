@@ -11,10 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -34,18 +34,19 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import org.semanticweb.owlapi.model.SWRLRule;
+import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -53,17 +54,13 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
-import org.semanticweb.owlapi.search.EntitySearcher;
 
+import com.Beans.Environment;
 import com.Beans.GreenHouse;
 import com.Beans.OptimalConditions;
 import com.Beans.Plant;
 import com.Scheduler.Data;
-import com.clarkparsia.owlapi.explanation.DefaultExplanationGenerator;
-import com.clarkparsia.owlapi.explanation.util.SilentExplanationProgressMonitor;
 
-import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationOrderer;
-import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationOrdererImpl;
 import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationTree;
 
 @ManagedBean(name = "MonitoringController")
@@ -77,10 +74,12 @@ public class MonitoringController {
 	private LineChartModel moistureModel;
 	private LineChartModel co2Model;
 
-	private String alert = " ";
+	private String alert = "";
+	private String sugestion = "Inchide geamurile! Completeaza cu compost!";
 
 	private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	private final static String knwoledgeOntologyPath = "/home/andra/git/ontology-frontend/Files/knowledge.owl";
+	private final static String iri = "http://www.semanticweb.org/andra/semantics";
 
 	// Methods
 
@@ -292,7 +291,7 @@ public class MonitoringController {
 			avgH = sH / Data.inteval;
 			avgCo2 = sCo2 / Data.inteval;
 
-			ProcessTemperature(avgT);
+			ProcessValues(avgT,avgH, avgCo2);
 
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
@@ -306,21 +305,35 @@ public class MonitoringController {
 			ChartSeries co2 = this.co2Model.getSeries().get(1);
 			co2.set(dateFormat.format(now.getTime()), avgCo2);
 
-			//set actual values
+			// set actual values
 			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 			File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 			OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
 			IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
 			OWLDataFactory factory = manager.getOWLDataFactory();
-			OWLNamedIndividual greenHouseA = factory.getOWLNamedIndividual(ontologyIRI + "#HouseA");
 
-			
+			OWLNamedIndividual greenHouseInd = factory
+					.getOWLNamedIndividual(ontologyIRI + "#" + selectedGreenHouse.getGreenHouseName());
+
 			OWLDataProperty hasActualT = factory.getOWLDataProperty(IRI.create(ontologyIRI + "#hasActualT"));
-			OWLDataPropertyAssertionAxiom dataPropertyAssertion = factory
-	                .getOWLDataPropertyAssertionAxiom(hasActualT, greenHouseA, avgT);
+
+			// delete previous configuration
+			Set<OWLOntologyChange> changes = new HashSet<OWLOntologyChange>();
+			Set<OWLDataPropertyAssertionAxiom> set = myOntology.getDataPropertyAssertionAxioms(greenHouseInd);
+
+			for (OWLDataPropertyAssertionAxiom a : set) {
+				OWLDataProperty growInProp = (OWLDataProperty) a.getProperty();
+				if (growInProp.equals(hasActualT))
+					changes.add(new RemoveAxiom(myOntology, a));
+			}
+			List<OWLOntologyChange> list = new ArrayList<OWLOntologyChange>(changes);
+			manager.applyChanges(list);
+
+			OWLDataPropertyAssertionAxiom dataPropertyAssertion = factory.getOWLDataPropertyAssertionAxiom(hasActualT,
+					greenHouseInd, (int) avgT);
 			AddAxiom ax1 = new AddAxiom(myOntology, dataPropertyAssertion);
 			manager.applyChange(ax1);
-			
+
 			File fileformated = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 			File newOntologyFile = fileformated.getAbsoluteFile();
 			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newOntologyFile));
@@ -333,12 +346,12 @@ public class MonitoringController {
 
 	private static OWLObjectRenderer renderer = new DLSyntaxObjectRenderer();
 
-	private void ProcessTemperature(double avgT) throws OWLOntologyCreationException {
+	private void ProcessValues(double avgT, double avgH, double avgCo2) throws OWLOntologyCreationException {
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
+		File file = new File(knwoledgeOntologyPath);
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
-		IRI ontologyIRI = IRI.create("http://www.semanticweb.org/andra/semantics");
+		IRI ontologyIRI = IRI.create(iri);
 		OWLDataFactory factory = manager.getOWLDataFactory();
 
 		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
@@ -349,27 +362,70 @@ public class MonitoringController {
 		OWLClass plantClass = factory.getOWLClass(ontologyIRI + "#Plant");
 
 		for (OWLNamedIndividual plant : reasoner.getInstances(plantClass, false).getFlattened()) {
-			System.out.println("person : " + renderer.render(plant));
+			System.out.println("plant : " + renderer.render(plant));
 		}
 
-		OWLNamedIndividual tomatoes = factory.getOWLNamedIndividual(ontologyIRI + "#Tomatoes");
+		OWLNamedIndividual plant = factory
+				.getOWLNamedIndividual(ontologyIRI + "#" + selectedGreenHouse.getPlant().getName());
+		OWLNamedIndividual greenHouse = factory
+				.getOWLNamedIndividual(ontologyIRI + "#" + selectedGreenHouse.getGreenHouseName());
 		OWLObjectProperty growInProperty = factory.getOWLObjectProperty(ontologyIRI + "#growIn");
-		OWLNamedIndividual greenHouseA = factory.getOWLNamedIndividual(ontologyIRI + "#HouseA");
 
 		boolean result = reasoner
-				.isEntailed(factory.getOWLObjectPropertyAssertionAxiom(growInProperty, tomatoes, greenHouseA));
+				.isEntailed(factory.getOWLObjectPropertyAssertionAxiom(growInProperty, plant, greenHouse));
 		System.out.println("Do tomatoes grow in GreenHouseA ? : " + result);
 
 		OWLClass tHighAlertClass = factory.getOWLClass(ontologyIRI + "#THighAlert");
-		OWLClassAssertionAxiom axiomTHigh = factory.getOWLClassAssertionAxiom(tHighAlertClass, greenHouseA);
-		System.out.println("Is the temperature from HouseA too high ? : " + reasoner.isEntailed(axiomTHigh));
+		OWLClassAssertionAxiom axiomTHigh = factory.getOWLClassAssertionAxiom(tHighAlertClass, greenHouse);
+		boolean tHIgh = reasoner.isEntailed(axiomTHigh);
+		//System.out.println("Is the temperature from HouseA too high ? : " + tHIgh);
+		if (tHIgh) {
+			OWLNamedIndividual THigh = factory.getOWLNamedIndividual(ontologyIRI + "#THigh");
+			Set<OWLDataPropertyAssertionAxiom> properties = myOntology.getDataPropertyAssertionAxioms(THigh);
+			for (OWLDataPropertyAssertionAxiom pa : properties) {
+				OWLDataProperty p = (OWLDataProperty) pa.getProperty();
+				String xx = p.getIRI().getShortForm().toString();
+				OWLLiteral v = pa.getObject();
+			}
+
+		}
 
 		OWLClass tLowAlertClass = factory.getOWLClass(ontologyIRI + "#TLowAlert");
-		OWLClassAssertionAxiom axiomTLow = factory.getOWLClassAssertionAxiom(tLowAlertClass, greenHouseA);
-		System.out.println("Is the temperature from HouseA too low ? : " + reasoner.isEntailed(axiomTLow));
-
-		if (avgT < selectedGreenHouse.getPlant().getOptimalConditions().getMinTemperature())
-			alert = "sasa";
+		OWLClassAssertionAxiom axiomTLow = factory.getOWLClassAssertionAxiom(tLowAlertClass, greenHouse);
+		//System.out.println("Is the temperature from HouseA too low ? : " + reasoner.isEntailed(axiomTLow));
+		StringBuilder b = new StringBuilder();
+		
+		if(avgT < selectedGreenHouse.getPlant().getOptimalConditions().getMinTemperature())
+		{
+			b.append(String.format("The temperature from [%s] is too low", selectedGreenHouse.getGreenHouseName()));
+			b.append("\r\n");
+		}
+		else if(avgT > selectedGreenHouse.getPlant().getOptimalConditions().getMaxTemperature()){
+			b.append(String.format("The temperature from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+			//b.append(System.getProperty("line.separator"));
+			b.append("\n");
+		}
+		if(avgH < selectedGreenHouse.getPlant().getOptimalConditions().getMinMoisture())
+		{
+			b.append(String.format("The humidity from [%s] is too low", selectedGreenHouse.getGreenHouseName()));
+			b.append("\r\n");
+		}
+		else if(avgH > selectedGreenHouse.getPlant().getOptimalConditions().getMaxMoisture()){
+			b.append(String.format("The humidity from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+			b.append("\r\n");
+		}
+		if(avgCo2 < selectedGreenHouse.getPlant().getOptimalConditions().getMinCo2())
+		{
+			b.append(String.format("The CO2 level from [%s] is too low", selectedGreenHouse.getGreenHouseName()));
+			b.append("\r\n");
+		}
+		else if(avgCo2 > selectedGreenHouse.getPlant().getOptimalConditions().getMaxCo2()){
+			b.append(String.format("The CO2 level from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+			b.append("\r\n");
+		}
+		
+		setAlert(b.toString());
+		
 
 	}
 
@@ -514,5 +570,13 @@ public class MonitoringController {
 		axis.setTickFormat("%H:%M:%S");
 		co2Model.getAxes().put(AxisType.X, axis);
 
+	}
+
+	public String getSugestion() {
+		return sugestion;
+	}
+
+	public void setSugestion(String sugestion) {
+		this.sugestion = sugestion;
 	}
 }

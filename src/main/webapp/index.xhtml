@@ -14,44 +14,90 @@
 <h:body>
 
 	<h1 class="title ui-widget-header ui-corner-all"
-		style="text-align: center">Welcome</h1>
+		style="text-align: center">Crop Assistance Application</h1>
 
 	<h:form id="alerts">
-
+		<p:panelGrid columns="2" layout="grid" style="border-color: #0000ff">
+			<h:outputText value="#{MonitoringController.alert}" escape="false"
+				style="white-space: pre-wrap;word-wrap: break-word; color: red ; "
+				class="title " />
+		</p:panelGrid>
 
 	</h:form>
 	<h:form id="form">
-		<p:tabView dynamic="true" cache="false">
+		<p:tabView dynamic="true" cache="true">
 			<p:tab id="t1" title="Environment Configuration">
-				<h:panelGrid columns="2" cellpadding="5">
-					<p:outputLabel for="greenHouse" value="GreenHouse: " />
-					<p:inputText id="greenHouse"
-						value="#{ConfigurationController.environment.greenHouseName}" />
+
+				<p:layout id="sugestions" style="min-width:900px;height:400px;">
+					<p:layoutUnit position="west" resizable="false" size="600">
+
+						<h:panelGrid columns="3" cellpadding="5">
+							<p:outputLabel for="greenHouse" value="GreenHouse: " />
+							<p:inputText id="greenHouse"
+								value="#{ConfigurationController.environment.greenHouseName}" />
+							<h:outputText value="" />
+
+							<p:outputLabel for="surface" value="Surface: " />
+							<p:inputText id="surface"
+								value="#{ConfigurationController.environment.surface}" />
+							<h:outputText value="mp" />
 
 
-					<p:outputLabel for="plant" value="Plant:" />
-					<p:selectOneMenu id="plant"
-						value="#{ConfigurationController.selectedPlant}"
-						style="width:170px">
-						<f:selectItem itemLabel="Select a plant" itemValue=""
-							noSelectionOption="true" />
-						<f:selectItems value="#{ConfigurationController.plants}" />
-					</p:selectOneMenu>
+							<p:outputLabel for="plant" value="Plant:" />
+							<p:selectOneMenu id="plant"
+								value="#{ConfigurationController.selectedPlant}"
+								style="width:170px">
+								<f:selectItem itemLabel="Select a plant" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{ConfigurationController.plants}" />
+								<f:ajax update="plantType" />
+							</p:selectOneMenu>
+							<h:outputText value="" />
 
-					<p:outputLabel for="seedingMoment" value="Seeding Moment:" />
-					<p:calendar id="seedingMoment"
-						value="#{ConfigurationController.environment.seedingMoment}" />
+							<p:outputLabel for="seedingMoment" value="Seeding Moment:" />
+							<p:calendar id="seedingMoment"
+								value="#{ConfigurationController.environment.seedingMoment}"
+								pattern="dd-MMM-yyyy" />
+							<h:outputText value="" />
+
+						</h:panelGrid>
 
 
-					<p:outputLabel for="expectation" value="Expectations: " />
-					<p:inputText id="expectation"
-						value="#{ConfigurationController.environment.expectations}" />
-				</h:panelGrid>
 
-				<p:growl id="growl" life="3000" />
-				<p:commandButton value="Submit"
-					action="#{ConfigurationController.submitConfiguration}"
-					icon="ui-icon-check" process="@form" update="growl" />
+						<p:growl id="growl" life="3000" />
+						<p:commandButton value="Submit"
+							style="margin-top:150; margin-left:450"
+							action="#{ConfigurationController.submitConfiguration}"
+							icon="ui-icon-check" process="@form" update="growl, form" />
+					</p:layoutUnit>
+
+
+					<p:layoutUnit position="center" resizable="true" size="320">
+						<h2 class="title ui-widget-header ui-corner-all"
+							style="text-align: center; color: green">Crop suggestions</h2>
+
+						<h:panelGrid columns="2" cellpadding="5">
+							<p:outputLabel for="recc"
+								value="Quantity of seeds reccommended(g): " />
+							<h:outputText id="recc"
+								value="#{ConfigurationController.quantityOfSeeds}"></h:outputText>
+
+							<p:outputLabel for="est" value="Estimated harvest time: " />
+
+							<h:outputText id="est"
+								value="#{ConfigurationController.harvestTime}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</h:outputText>
+
+						</h:panelGrid>
+
+					</p:layoutUnit>
+
+
+
+
+
+				</p:layout>
 
 			</p:tab>
 
@@ -130,7 +176,6 @@
 								update="charts, alerts" />
 
 							<h:form id="charts">
-								<h:outputText value="#{MonitoringController.alert}" />
 								<p:chart id="tempChart" type="line"
 									model="#{MonitoringController.temperatureModel}"
 									style="height:300px;" />
