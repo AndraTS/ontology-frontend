@@ -68,14 +68,14 @@ import uk.ac.manchester.cs.owl.explanation.ordering.ExplanationTree;
 public class MonitoringController {
 
 	// Properties
-	private GreenHouse selectedGreenHouse = new GreenHouse();
+	private GreenHouse selectedGreenHouse;
 	private List<String> greenHouses = new ArrayList<>();
 	private LineChartModel temperatureModel;
 	private LineChartModel moistureModel;
 	private LineChartModel co2Model;
 
 	private String alert = "";
-	private String sugestion = "Inchide geamurile! Completeaza cu compost!";
+	private String sugestion = "";
 
 	private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	private final static String knwoledgeOntologyPath = "/home/andra/git/ontology-frontend/Files/knowledge.owl";
@@ -86,10 +86,12 @@ public class MonitoringController {
 	@PostConstruct
 	public void init() throws OWLOntologyCreationException, FileNotFoundException, OWLOntologyStorageException {
 		getGreenHouses();
-		initTemperatureModel();
-		initHumidityModel();
-		initCo2Model();
-		readData();
+		if (selectedGreenHouse != null) {
+			initTemperatureModel();
+			initHumidityModel();
+			initCo2Model();
+			readData();
+		}
 	}
 
 	public void onGreenHouseChange() throws OWLOntologyCreationException {
@@ -119,6 +121,7 @@ public class MonitoringController {
 
 	public List<String> getGreenHouses() throws OWLOntologyCreationException {
 
+		
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
@@ -144,6 +147,7 @@ public class MonitoringController {
 
 		if (greenHouses.size() > 0) {
 			String firstGreenHouseName = greenHouses.get(0);
+			selectedGreenHouse = new GreenHouse();
 			selectedGreenHouse = getGreenHouseByName(firstGreenHouseName);
 		}
 
@@ -272,6 +276,8 @@ public class MonitoringController {
 		double sH = 0;
 		double avgCo2 = 0;
 		double sCo2 = 0;
+		double avgTE = 0;
+		double sTE = 0;
 
 		Data.br = new BufferedReader(new FileReader(Data.csvFile));
 		List<String> lines = Data.br.lines().skip(Data.last).limit(Data.inteval).collect(Collectors.toList());
@@ -291,7 +297,7 @@ public class MonitoringController {
 			avgH = sH / Data.inteval;
 			avgCo2 = sCo2 / Data.inteval;
 
-			ProcessValues(avgT,avgH, avgCo2);
+			ProcessValues(avgT, avgH, avgCo2);
 
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
@@ -378,7 +384,8 @@ public class MonitoringController {
 		OWLClass tHighAlertClass = factory.getOWLClass(ontologyIRI + "#THighAlert");
 		OWLClassAssertionAxiom axiomTHigh = factory.getOWLClassAssertionAxiom(tHighAlertClass, greenHouse);
 		boolean tHIgh = reasoner.isEntailed(axiomTHigh);
-		//System.out.println("Is the temperature from HouseA too high ? : " + tHIgh);
+		// System.out.println("Is the temperature from HouseA too high ? : " +
+		// tHIgh);
 		if (tHIgh) {
 			OWLNamedIndividual THigh = factory.getOWLNamedIndividual(ontologyIRI + "#THigh");
 			Set<OWLDataPropertyAssertionAxiom> properties = myOntology.getDataPropertyAssertionAxioms(THigh);
@@ -392,40 +399,47 @@ public class MonitoringController {
 
 		OWLClass tLowAlertClass = factory.getOWLClass(ontologyIRI + "#TLowAlert");
 		OWLClassAssertionAxiom axiomTLow = factory.getOWLClassAssertionAxiom(tLowAlertClass, greenHouse);
-		//System.out.println("Is the temperature from HouseA too low ? : " + reasoner.isEntailed(axiomTLow));
+		// System.out.println("Is the temperature from HouseA too low ? : " +
+		// reasoner.isEntailed(axiomTLow));
 		StringBuilder b = new StringBuilder();
-		
-		if(avgT < selectedGreenHouse.getPlant().getOptimalConditions().getMinTemperature())
-		{
+		StringBuilder bs = new StringBuilder();
+
+		if (avgT < selectedGreenHouse.getPlant().getOptimalConditions().getMinTemperature()) {
 			b.append(String.format("The temperature from [%s] is too low", selectedGreenHouse.getGreenHouseName()));
+			bs.append("Raise the temperature.");
 			b.append("\r\n");
-		}
-		else if(avgT > selectedGreenHouse.getPlant().getOptimalConditions().getMaxTemperature()){
+			bs.append("\r\n");
+		} else if (avgT > selectedGreenHouse.getPlant().getOptimalConditions().getMaxTemperature()) {
 			b.append(String.format("The temperature from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
-			//b.append(System.getProperty("line.separator"));
+			bs.append("Lower the temperature.");
 			b.append("\n");
+			bs.append("\r\n");
 		}
-		if(avgH < selectedGreenHouse.getPlant().getOptimalConditions().getMinMoisture())
-		{
+		if (avgH < selectedGreenHouse.getPlant().getOptimalConditions().getMinMoisture()) {
 			b.append(String.format("The humidity from [%s] is too low", selectedGreenHouse.getGreenHouseName()));
+			bs.append("Start the watering system.");
 			b.append("\r\n");
-		}
-		else if(avgH > selectedGreenHouse.getPlant().getOptimalConditions().getMaxMoisture()){
+			bs.append("\r\n");
+		} else if (avgH > selectedGreenHouse.getPlant().getOptimalConditions().getMaxMoisture()) {
 			b.append(String.format("The humidity from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+			bs.append("Raise the ventilation.");
 			b.append("\r\n");
+			bs.append("\r\n");
 		}
-		if(avgCo2 < selectedGreenHouse.getPlant().getOptimalConditions().getMinCo2())
-		{
+		if (avgCo2 < selectedGreenHouse.getPlant().getOptimalConditions().getMinCo2()) {
 			b.append(String.format("The CO2 level from [%s] is too low", selectedGreenHouse.getGreenHouseName()));
+			bs.append("Add more compost.");
 			b.append("\r\n");
-		}
-		else if(avgCo2 > selectedGreenHouse.getPlant().getOptimalConditions().getMaxCo2()){
+			bs.append("\r\n");
+		} else if (avgCo2 > selectedGreenHouse.getPlant().getOptimalConditions().getMaxCo2()) {
 			b.append(String.format("The CO2 level from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+			bs.append("Open a window.");
 			b.append("\r\n");
+			bs.append("\r\n");
 		}
-		
+
 		setAlert(b.toString());
-		
+		setSugestion(bs.toString());
 
 	}
 

@@ -17,15 +17,24 @@
 		style="text-align: center">Crop Assistance Application</h1>
 
 	<h:form id="alerts">
+	
 		<p:panelGrid columns="2" layout="grid" style="border-color: #0000ff">
+		<h:outputText value ="Alerts" style = "color:black"> </h:outputText>
+		<h:outputText value ="Suggestions" style = "color:black"> </h:outputText>
 			<h:outputText value="#{MonitoringController.alert}" escape="false"
 				style="white-space: pre-wrap;word-wrap: break-word; color: red ; "
+				class="title " />
+				
+				<h:outputText value="#{MonitoringController.sugestion}" escape="false"
+				style="white-space: pre-wrap;word-wrap: break-word; color: blue ; "
 				class="title " />
 		</p:panelGrid>
 
 	</h:form>
 	<h:form id="form">
-		<p:tabView dynamic="true" cache="true">
+		<p:tabView dynamic="true" cache="false">
+		
+		<p:ajax event="tabChange" listener="#{MonitoringController.init()}" />
 			<p:tab id="t1" title="Environment Configuration">
 
 				<p:layout id="sugestions" style="min-width:900px;height:400px;">
