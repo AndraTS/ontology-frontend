@@ -73,6 +73,15 @@ public class MonitoringController {
 	private LineChartModel temperatureModel;
 	private LineChartModel moistureModel;
 	private LineChartModel co2Model;
+	private Double extTemp;
+
+	public Double getExtTemp() {
+		return extTemp;
+	}
+
+	public void setExtTemp(Double extTemp) {
+		this.extTemp = extTemp;
+	}
 
 	private String alert = "";
 	private String sugestion = "";
@@ -121,7 +130,6 @@ public class MonitoringController {
 
 	public List<String> getGreenHouses() throws OWLOntologyCreationException {
 
-		
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		File file = new File("/home/andra/git/ontology-frontend/Files/knowledge.owl");
 		OWLOntology myOntology = manager.loadOntologyFromOntologyDocument(file);
@@ -289,6 +297,7 @@ public class MonitoringController {
 				sT = sT + Double.parseDouble(p[4]);
 				sH = sH + Double.parseDouble(p[5]);
 				sCo2 = sCo2 + Double.parseDouble(p[6]);
+				sTE = sTE + Double.parseDouble(p[3]);
 			}
 			Data.last = Data.last + Data.inteval;
 			lines.clear();
@@ -296,9 +305,11 @@ public class MonitoringController {
 			avgT = sT / Data.inteval;
 			avgH = sH / Data.inteval;
 			avgCo2 = sCo2 / Data.inteval;
+			avgTE = sTE / Data.inteval;
 
-			ProcessValues(avgT, avgH, avgCo2);
+			ProcessValues(avgT, avgH, avgCo2, avgTE);
 
+			setExtTemp(avgTE);
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
 
@@ -352,7 +363,8 @@ public class MonitoringController {
 
 	private static OWLObjectRenderer renderer = new DLSyntaxObjectRenderer();
 
-	private void ProcessValues(double avgT, double avgH, double avgCo2) throws OWLOntologyCreationException {
+	private void ProcessValues(double avgT, double avgH, double avgCo2, double avgTE)
+			throws OWLOntologyCreationException {
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		File file = new File(knwoledgeOntologyPath);
@@ -410,10 +422,20 @@ public class MonitoringController {
 			b.append("\r\n");
 			bs.append("\r\n");
 		} else if (avgT > selectedGreenHouse.getPlant().getOptimalConditions().getMaxTemperature()) {
-			b.append(String.format("The temperature from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
-			bs.append("Lower the temperature.");
-			b.append("\n");
-			bs.append("\r\n");
+			if (avgT > avgTE /*&& avgTE < selectedGreenHouse.getPlant().getOptimalConditions().getMaxTemperature()*/) {
+				b.append(
+						String.format("The temperature from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+				bs.append("Open a window.");
+				b.append("\n");
+				bs.append("\r\n");
+			} else {
+
+				b.append(
+						String.format("The temperature from [%s] is too high", selectedGreenHouse.getGreenHouseName()));
+				bs.append("Lower the temperature.");
+				b.append("\n");
+				bs.append("\r\n");
+			}
 		}
 		if (avgH < selectedGreenHouse.getPlant().getOptimalConditions().getMinMoisture()) {
 			b.append(String.format("The humidity from [%s] is too low", selectedGreenHouse.getGreenHouseName()));

@@ -17,24 +17,27 @@
 		style="text-align: center">Crop Assistance Application</h1>
 
 	<h:form id="alerts">
-	
+
 		<p:panelGrid columns="2" layout="grid" style="border-color: #0000ff">
-		<h:outputText value ="Alerts" style = "color:black"> </h:outputText>
-		<h:outputText value ="Suggestions" style = "color:black"> </h:outputText>
+			<h:outputText value="Alerts" style="color:black">
+			</h:outputText>
+			<h:outputText value="Suggestions" style="color:black">
+			</h:outputText>
 			<h:outputText value="#{MonitoringController.alert}" escape="false"
 				style="white-space: pre-wrap;word-wrap: break-word; color: red ; "
-				class="title " />
-				
-				<h:outputText value="#{MonitoringController.sugestion}" escape="false"
+				class="title;font-size: 20px "  />
+
+			<h:outputText value="#{MonitoringController.sugestion}"
+				escape="false"
 				style="white-space: pre-wrap;word-wrap: break-word; color: blue ; "
-				class="title " />
+				class="title;font-size: 20px " />
 		</p:panelGrid>
 
 	</h:form>
 	<h:form id="form">
 		<p:tabView dynamic="true" cache="false">
-		
-		<p:ajax event="tabChange" listener="#{MonitoringController.init()}" />
+
+			<p:ajax event="tabChange" listener="#{MonitoringController.init()}" />
 			<p:tab id="t1" title="Environment Configuration">
 
 				<p:layout id="sugestions" style="min-width:900px;height:400px;">
@@ -113,7 +116,7 @@
 			<p:tab title="Environment Monitoring">
 
 				<p:panel header="Green house monitoring" style="margin-bottom:10px;">
-					<h:panelGrid columns="4" cellpadding="5">
+					<h:panelGrid id = "info" columns="6" cellpadding="5">
 						<p:outputLabel for="gH" value="Green House: " />
 
 						<p:selectOneMenu id="gH"
@@ -127,15 +130,20 @@
 						</p:selectOneMenu>
 
 
-						<p:outputLabel for="splant" value="Plant: " />
+						<p:outputLabel for="splant" value="Plant: " style= "font-size: 20px"/>
 						<h:outputText id="splant"
 							value="#{MonitoringController.selectedGreenHouse.plant.name}"
-							style="color: blue" />
+							style="color: blue ; font-size: 20px" />
+
+						<p:outputLabel for="te" value="Exterior temperature: " style= "font-size: 20px"/>
+						<h:outputText id="te" value="#{MonitoringController.extTemp}" style="color: green; font-size: 20px">
+							<f:convertNumber pattern="#0.00" />
+						</h:outputText>
 					</h:panelGrid>
 
 					<p:separator />
 
-					<p:layout id="dashboard" style="min-width:400px;min-height:500px;">
+					<p:layout id="dashboard" style="min-width:450px;min-height:500px;">
 
 						<p:layoutUnit position="west" resizable="true" size="320">
 							<h:outputText value="Optimal growth conditions:" />
@@ -182,7 +190,7 @@
 						<p:layoutUnit position="center">
 
 							<p:poll interval="5" listener="#{MonitoringController.readData}"
-								update="charts, alerts" />
+								update="charts, alerts, info" />
 
 							<h:form id="charts">
 								<p:chart id="tempChart" type="line"
@@ -203,8 +211,7 @@
 				</p:panel>
 
 			</p:tab>
-			<p:tab title="Feedback">
-			</p:tab>
+
 		</p:tabView>
 	</h:form>
 
